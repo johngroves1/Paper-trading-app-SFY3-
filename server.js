@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
+const path = require("path");
 
 const initializePassport = require("./passportConfig");
 
@@ -32,6 +33,8 @@ app.use(passport.session());
 
 app.use(flash());
 
+//app.use("/users/chart", chart)
+
 app.get('/', (req, res)=>{
     res.render('index');
 });
@@ -47,6 +50,15 @@ app.get('/users/login', checkAuthenticated,  (req, res) => {
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
     res.render("dashboard", { user: req.user.name });
 });
+
+app.get('/users/chart', checkNotAuthenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, "/chart.html"));
+});
+
+app.get("/users/javascript", (req, res) => {
+    res.sendFile(path.join(__dirname, "/chart.js"));
+});
+
 
 app.get('/users/logout', (req, res)=>{
     req.logOut();
