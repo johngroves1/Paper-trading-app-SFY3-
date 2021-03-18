@@ -10,33 +10,133 @@
 const log = console.log;
 
 const chartProperties = {
-  width:1500,
-  height:600,
-  timeScale:{
-    timeVisible:true,
-    secondsVisible:false,
+  width: 1500,
+  height: 600,
+  timeScale: {
+    timeVisible: true,
+    secondsVisible: false,
   }
 }
 
 const domElement = document.getElementById('tvchart');
-const chart = LightweightCharts.createChart(domElement,chartProperties);
+const chart = LightweightCharts.createChart(domElement, chartProperties);
 const candleSeries = chart.addCandlestickSeries();
 
+var total = 1000000.00;
+document.getElementById('output').innerHTML = "Wallet: " + "$" + total;
 
-fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=5m&limit=50000`)
+
+
+
+
+fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=50000`)
   .then(res => res.json())
   .then(data => {
     const cdata = data.map(d => {
-      return {time:d[0]/1000,open:parseFloat(d[1]),high:parseFloat(d[2]),low:parseFloat(d[3]),close:parseFloat(d[4])}
+      return { time: d[0] / 1000, open: parseFloat(d[1]), high: parseFloat(d[2]), low: parseFloat(d[3]), close: parseFloat(d[4]) }
     });
     candleSeries.setData(cdata);
+    cdata.forEach(e => {
+      //log(e.high);
+      if (e.high > 50000) {
+        log(e.time);
+        log(e.high);
+        log("ORDER SUCCESFUL")
+      }
+
+    });
   })
   .catch(err => log(err))
 
 //Dynamic Chart
 const socket = io.connect('http://127.0.0.1:3000/');
+const socket1 = io.connect('http://127.0.0.1:3001/');
 
-socket.on('KLINE',(pl)=>{
+
+socket.on('KLINE', (pl) => {
   //log(pl);
   candleSeries.update(pl);
+  document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
+
+
+
 });
+
+socket1.on('KLINE1', (pl) => {
+  log(pl.open);
+  //candleSeries.update(pl);
+  //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.close;
+
+
+
+});
+
+
+function limitOrderB() {
+
+  var limitOrder = document.getElementById('amountLimit').value;
+  var limitValidation = document.getElementById('priceLimit').value.length;
+  var limitPrice = document.getElementById('priceLimit').value;
+  //log(limitPrice);
+
+  if (total < limitOrder || limitValidation == 0) {
+    document.getElementById('output').innerHTML = "Wallet: " + "$" + total + " Insufficient Funds";
+
+  } else {
+
+    document.getElementById('limit1').innerHTML = limitOrder + " Amount USDT";
+
+    socket1.once('KLINE1', (pl) => {
+      //log(pl.close);
+      var limit1 = pl.close;
+      var limit1time = pl.time;
+      var date = new Date(pl.time * 1000);
+      //log(limitOrder);
+      document.getElementById('limit1price').innerHTML = limitPrice + " Price USDT";
+      var limit1amount = limitOrder / limitPrice;
+      //log(limit1amount);
+      document.getElementById('limit1amount').innerHTML = limit1amount + " BTC";
+      document.getElementById('limit1time').innerHTML = "Order Submitted: " + date.toGMTString();
+
+      total = total - limitOrder;
+      //log(total);
+      document.getElementById('output').innerHTML = "Wallet: " + "$" + total;
+
+
+    });
+
+  }
+}
+
+function marketOrderB() {
+
+  var buyOrder = document.getElementById('amountMarket').value;
+
+  if (total < buyOrder) {
+    document.getElementById('output').innerHTML = "Wallet: " + "$" + total + " Insufficient Funds";
+
+  } else {
+
+    document.getElementById('order1').innerHTML = buyOrder + " USDT Amount";
+
+    socket.once('KLINE', (pl) => {
+     //log(pl.close);
+      var order1 = pl.close;
+      //log(buyOrder);
+      document.getElementById('order1price').innerHTML = order1 + " Average Price USD";
+      var order1amount = buyOrder / order1;
+      //log(order1amount);
+      document.getElementById('order1amount').innerHTML = order1amount + " BTC";
+
+      total = total - buyOrder;
+      //log(total);
+      document.getElementById('output').innerHTML = "Wallet: " + "$" + total;
+
+
+    });
+
+  }
+
+
+
+}

@@ -3,8 +3,10 @@ const api = require('binance');
 const express = require('express');
 const app = express();
 const server = app.listen('3000',() => log(`Kline Data Server started on port 3000`));
+const server1 = app.listen('3001',() => log(`Kline Data Server started on port 3001`));
 const socket = require('socket.io');
 const io = socket(server);
+const io1 = socket(server1);
 
 //connecting to binance api
 const bRest = new api.BinanceRest({
@@ -16,6 +18,13 @@ const bRest = new api.BinanceRest({
         handleDrift: true
 });
 const binanceWS = new api.BinanceWS(true);
-const bws = binanceWS.onKline('BTCUSDT', '5m', (data) => {
+const binanceWS1 = new api.BinanceWS(true);
+
+
+const bws = binanceWS.onKline('BTCUSDT', '1d', (data) => {
     io.sockets.emit('KLINE',{time:Math.round(data.kline.startTime/1000),open:parseFloat(data.kline.open),high:parseFloat(data.kline.high),low:parseFloat(data.kline.low),close:parseFloat(data.kline.close)});
+});
+
+const bws1 = binanceWS1.onKline('BTCUSDT', '1m', (data) => {
+    io1.sockets.emit('KLINE1',{time:Math.round(data.kline.startTime/1000),open:parseFloat(data.kline.open),high:parseFloat(data.kline.high),low:parseFloat(data.kline.low),close:parseFloat(data.kline.close)});
 });
