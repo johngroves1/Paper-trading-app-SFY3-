@@ -59,6 +59,19 @@ app.get("/users/javascript", (req, res) => {
     res.sendFile(path.join(__dirname, "/chart.js"));
 });
 
+app.get("/users/style", (req, res) => {
+    res.sendFile(path.join(__dirname, "/style.css"));
+});
+
+app.get("/users/style", (req, res) => {
+    res.sendFile(path.join(__dirname, "/style.css"));
+});
+
+app.get("/users/images", (req, res) => {
+    res.sendFile(path.join(__dirname, "/images/stock.jpg"));
+});
+
+
 
 app.get('/users/logout', (req, res)=>{
     req.logOut();
