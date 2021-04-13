@@ -39,9 +39,9 @@ fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/kl
     cdata.forEach(e => {
       //log(e.high);
       if (e.high > 50000) {
-        log(e.time);
-        log(e.high);
-        log("ORDER SUCCESFUL")
+       // log(e.time);
+        //log(e.high);
+       // log("ORDER SUCCESFUL")
       }
 
     });
@@ -50,11 +50,11 @@ fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/kl
 
 //Dynamic Chart
 const socket = io.connect('http://127.0.0.1:3000/');
-const socket1 = io.connect('http://127.0.0.1:3001/');
+const socket1 = io.connect('http://127.0.0.1:3000/');
 
 
 socket.on('KLINE', (pl) => {
-  //log(pl);
+  log(pl.open + "Not Yurt");
   candleSeries.update(pl);
   document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
 
@@ -62,12 +62,19 @@ socket.on('KLINE', (pl) => {
 
 });
 
-socket1.on('KLINE1', (pl) => {
-  log(pl.open);
+socket.on('KLINE1', (pl) => {
+  log(pl.open + "Yurt");
   //candleSeries.update(pl);
   //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.close;
 
 
+
+});
+
+socket.on('KLINE2', (pl) => {
+  log(pl.open + "Yurty McYurt");
+  //candleSeries.update(pl);
+  //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.close;
 
 });
 
@@ -80,7 +87,7 @@ function limitOrderB() {
   //log(limitPrice);
 
   if (total < limitOrder || limitValidation == 0) {
-    document.getElementById('output').innerHTML = "Wallet: " + "$" + total + " Insufficient Funds";
+    document.getElementById('output').innerHTML = "Wallet: " + "$" + total + " Insufficient Funds | Incorrect Entry";
 
   } else {
 
@@ -120,7 +127,7 @@ function marketOrderB() {
     document.getElementById('order1').innerHTML = buyOrder + " USDT Amount";
 
     socket.once('KLINE', (pl) => {
-     //log(pl.close);
+     log(pl.close);
       var order1 = pl.close;
       //log(buyOrder);
       document.getElementById('order1price').innerHTML = order1 + " Average Price USD";
