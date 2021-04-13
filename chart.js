@@ -53,7 +53,7 @@ const socket = io.connect('http://127.0.0.1:3000/');
 const socket1 = io.connect('http://127.0.0.1:3000/');
 
 
-socket.on('KLINE', (pl) => {
+socket.on('KLINE_BTC_1d', (pl) => {
   log(pl.open + "Not Yurt");
   candleSeries.update(pl);
   document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
@@ -62,7 +62,7 @@ socket.on('KLINE', (pl) => {
 
 });
 
-socket.on('KLINE1', (pl) => {
+socket.on('KLINE_BTC_1m', (pl) => {
   log(pl.open + "Yurt");
   //candleSeries.update(pl);
   //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.close;
@@ -71,7 +71,7 @@ socket.on('KLINE1', (pl) => {
 
 });
 
-socket.on('KLINE2', (pl) => {
+socket.on('KLINE_BTC_4h', (pl) => {
   log(pl.open + "Yurty McYurt");
   //candleSeries.update(pl);
   //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.close;
@@ -93,7 +93,7 @@ function limitOrderB() {
 
     document.getElementById('limit1').innerHTML = limitOrder + " Amount USDT";
 
-    socket1.once('KLINE1', (pl) => {
+    socket1.once('KLINE_BTC_1m', (pl) => {
       //log(pl.close);
       var limit1 = pl.close;
       var limit1time = pl.time;
@@ -126,7 +126,7 @@ function marketOrderB() {
 
     document.getElementById('order1').innerHTML = buyOrder + " USDT Amount";
 
-    socket.once('KLINE', (pl) => {
+    socket.once('KLINE_BTC_1d', (pl) => {
      log(pl.close);
       var order1 = pl.close;
       //log(buyOrder);
