@@ -15,9 +15,29 @@
 
   <img alt="Poster" id="poster" src="/users/image">
   
+
+
   <h3>Market Order</h3>
-  <label for="amountMarket">Amount USDT:</label>
-  <input type="number" id="amountMarket" name="amountMarket"><br><br>
+  <form action="/users/chart" method="POST">
+    <div id="input1">
+        <input type="number" id="id" name="id" placeholder="id" required>
+    </div>
+    <div id="input1">
+        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+    </div>
+    <div id="input1">
+        <input type="number" id="ethereum" name="ethereum" placeholder="ethereum" required>
+    </div>
+    <div id="input1">
+        <input type="number" id="xrp" name="xrp" placeholder="xrp" required>
+    </div>
+    <div class="row justify-content-center">
+        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
+    </div>
+    <a href="/users/dashboard"></a>
+</form>
+  
+
 
   <button onclick="marketOrderB()">Buy</button><br>
   <p id="order1"></p>
@@ -40,6 +60,7 @@
   <script src="/users/javascript" ></script>
 
   
-
+  <a href="/users/dashboard">Dashboard</a>
   <a href="/users/logout">Logout</a>
+
 </html>

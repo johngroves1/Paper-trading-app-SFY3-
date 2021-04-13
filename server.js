@@ -48,7 +48,7 @@ app.get('/users/login', checkAuthenticated,  (req, res) => {
 });
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
-    res.render("dashboard", { user: req.user.name });
+    res.render("dashboard", { user: req.user.name, test: req.user.id });
 });
 
 app.get('/users/chart', checkNotAuthenticated, (req, res) => {
@@ -71,7 +71,9 @@ app.get("/users/images", (req, res) => {
     res.sendFile(path.join(__dirname, "/images/stock.jpg"));
 });
 
-
+app.get('/users/chart', (req, res) => {
+    res.render("chart");
+});
 
 app.get('/users/logout', (req, res)=>{
     req.logOut();
@@ -82,12 +84,8 @@ app.get('/users/logout', (req, res)=>{
 app.post('/users/register', async (req, res)=>{
     let { name, email, password, password2} = req.body;
 
-    console.log({
-        name,
-        email,
-        password,
-        password2
-    });
+    
+
 
     let errors = [];
 
@@ -154,6 +152,22 @@ app.post('/users/login',
         failureFlash: true // Displays flash messages 
     })
 );
+
+app.post('/users/chart', (req, res) =>{
+    let { id, bitcoin, ethereum, xrp} = req.body;
+
+    pool.query(
+        `INSERT INTO wallet (id, bitcoin, ethereum, xrp) VALUES ($1, $2, $3, $4)`, [id, bitcoin, ethereum, xrp],
+        (err, results) => {
+            console.log(results.rows);
+            req.flash('success_msg', "Coins added to Wallet");
+            res.redirect('/users/chart');
+          }
+          
+    );
+})
+
+
 
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
