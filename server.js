@@ -168,18 +168,50 @@ app.post('/users/login',
     })
 );
 
-app.post('/users/chart', (req, res) =>{
-    let { id, bitcoin, ethereum, xrp} = req.body;
+app.post('/users/chart', (req, res) => {
+    //let {bitcoin} = req.body;
+    console.log(req.body.id);
+    console.log(req.body.bitcoin);
+    //res.redirect('/users/chart');
 
     pool.query(
-        `INSERT INTO wallet (id, bitcoin, ethereum, xrp) VALUES ($1, $2, $3, $4)`, [id, bitcoin, ethereum, xrp],
-        (err, results) => {
-            console.log(results.rows);
-            req.flash('success_msg', "Coins added to Wallet");
-            res.redirect('/users/chart');
-          }
-          
-    );
+        `SELECT * FROM WALLET
+        WHERE id = $1`, [req.body.id], (err, results) => {
+        if (err) {
+            throw err
+        }
+        console.log(results.rows);
+
+        if (results.rows.length > 0) {
+            pool.query(
+                `UPDATE wallet SET bitcoin = bitcoin + $1
+                    WHERE id =$2`, [req.body.bitcoin, req.body.id], (err, results) => {
+                if (err) {
+                    throw err
+                }
+                console.log(results.rows);
+               // req.flash('success_msg', "You are now registered. Please log in");
+                //res.redirect('/users/chart');
+            }
+            )
+        } else {
+            // If wallet does not exist insert data to DB
+            pool.query(
+                `INSERT INTO wallet (id, bitcoin) VALUES ($2, $1)`, [req.body.bitcoin, req.body.id], (err, results) => {
+                if (err) {
+                    throw err
+                }
+                console.log(results.rows);
+                //req.flash('success_msg', "You are now registered. Please log in");
+                
+            }
+            )
+
+
+        }
+    })
+    res.redirect('/users/chart');
+
 })
 
 function checkAuthenticated(req, res, next){

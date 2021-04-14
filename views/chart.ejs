@@ -200,16 +200,10 @@
   <h3>Market Order</h3>
   <form action="/users/chart" method="POST">
     <div id="input1">
-      <input type="number" id="id" name="id" placeholder="id" required>
+      <input type="hidden" id="id" name="id" value=<%- test %> required>
     </div>
     <div id="input1">
       <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
-    </div>
-    <div id="input1">
-      <input type="number" id="ethereum" name="ethereum" placeholder="ethereum" required>
-    </div>
-    <div id="input1">
-      <input type="number" id="xrp" name="xrp" placeholder="xrp" required>
     </div>
     <div class="row justify-content-center">
       <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
