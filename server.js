@@ -76,12 +76,12 @@ app.get('/users/chart', (req, res) => {
 });
 
 app.get('/users/assets', checkNotAuthenticated, (req, res) => {
-    
 
     pool.query(
         `SELECT * FROM wallet
-        WHERE id = 6`, (err, results) => {
+        WHERE id = 6`,  (err, results) => {
             console.log(results.rows);
+            console.log(req.body.id)
             //res.render("assets", { btc: results.bitcoin});
             //console.log(results.rows[0]);
             //console.log(results.rows[0].bitcoin);
@@ -148,11 +148,22 @@ app.post('/users/register', async (req, res)=>{
                             if (err){
                                 throw err
                             }
-                            console.log(results.rows);
+                            console.log(results.rows[0].id);
                             req.flash('success_msg', "You are now registered. Please log in");
                             res.redirect('/users/login');
+
+                            pool.query(
+                                `INSERT INTO wallet (id, bitcoin, ethereum, xrp) VALUES ($1, 0, 0, 0)`, [results.rows[0].id], (err, results) =>{
+                                    if (err){
+                                        throw err
+                                    }
+                                    console.log(results.rows);
+                                    
+                                }
+                            )
                         }
                     )
+                    
                 }
             }
         );
