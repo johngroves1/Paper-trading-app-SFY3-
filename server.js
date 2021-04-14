@@ -52,7 +52,7 @@ app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
 });
 
 app.get('/users/chart', checkNotAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, "/chart.html"));
+    res.render("chart", { user: req.user.name, test: req.user.id });
 });
 
 app.get("/users/javascript", (req, res) => {
