@@ -76,12 +76,13 @@ app.get('/users/chart', (req, res) => {
 });
 
 app.get('/users/assets', checkNotAuthenticated, (req, res) => {
+    console.log(req.user.id);
 
     pool.query(
         `SELECT * FROM wallet
-        WHERE id = 6`,  (err, results) => {
+        WHERE id = $1`, [req.user.id],  (err, results) => {
             console.log(results.rows);
-            console.log(req.body.id)
+            //console.log(req.body.id)
             //res.render("assets", { btc: results.bitcoin});
             //console.log(results.rows[0]);
             //console.log(results.rows[0].bitcoin);
