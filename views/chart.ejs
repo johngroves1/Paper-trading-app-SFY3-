@@ -9,7 +9,7 @@
       margin-left: 10%;
       margin-right: 10%;
       font-family: Arial;
-      background-color: black;
+      background-color: rgb(71, 71, 105);
 ;
     }
 
@@ -142,28 +142,31 @@
 <body>
 
   <div class="topnav" id="myTopnav">
-    <a href="#home" class="active">Home</a>
-    <a href="#news">News</a>
-    <a href="#contact">Contact</a>
+    <a href="/users/dashboard" class="active">Home</a>
     <div class="dropdown">
-      <button class="dropbtn">Dropdown
+      <button class="dropbtn">Coins
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
+        <a href="/users/chart">Bitcoin</a>
+        <a href="#">Ethereum</a>
+        <a href="#">XRP</a>
       </div>
     </div>
     <div class="topnav-right">
-      <a style="text-align: right;">Hello <%= user.charAt(0).toUpperCase() + user.slice(1) %></a>
-      <a style="text-align: right;">Hello <%= test %></a>
-      <a href="#about">About</a>
+      <a href="/users/assets"  style="text-align: right;">Hello <%= user.charAt(0).toUpperCase() + user.slice(1) %></a>
+      <a href="/users/logout">Logout</a>
 
     </div>
 
+
     <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
   </div>
+
+  <br><br>
+  <br><br>
+  <br><br>
+  <br><br>
 
   <script>
     function myFunction() {
@@ -178,9 +181,7 @@
   </script>
 
 
-  <a href="/users/chart">View Charts</a>
-  <br><br>
-  <a href="/users/logout">Logout</a>
+
   </head>
 
   <body>
@@ -239,7 +240,5 @@
   <script src="/users/javascript"></script>
 
 
-  <a href="/users/dashboard">Dashboard</a>
-  <a href="/users/logout">Logout</a>
 
 </html>

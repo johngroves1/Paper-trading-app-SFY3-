@@ -75,6 +75,23 @@ app.get('/users/chart', (req, res) => {
     res.render("chart");
 });
 
+app.get('/users/assets', checkNotAuthenticated, (req, res) => {
+    
+
+    pool.query(
+        `SELECT * FROM wallet
+        WHERE id = 6`, (err, results) => {
+            console.log(results.rows);
+            //res.render("assets", { btc: results.bitcoin});
+            //console.log(results.rows[0]);
+            //console.log(results.rows[0].bitcoin);
+            res.render("assets", { user: req.user.name, test: req.user.id, email: req.user.email,  btc: results.rows[0].bitcoin, 
+            eth: results.rows[0].ethereum, xrp: results.rows[0].xrp});
+            //res.render("assets", { btc: results.rows[0].bitcoin})
+          }     
+    );
+});
+
 app.get('/users/logout', (req, res)=>{
     req.logOut();
     req.flash('sucess_msg', "You have logged out");
@@ -83,8 +100,6 @@ app.get('/users/logout', (req, res)=>{
 
 app.post('/users/register', async (req, res)=>{
     let { name, email, password, password2} = req.body;
-
-    
 
 
     let errors = [];
@@ -167,8 +182,6 @@ app.post('/users/chart', (req, res) =>{
     );
 })
 
-
-
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
         return res.redirect('/users/dashboard');
@@ -182,6 +195,7 @@ function checkNotAuthenticated(req, res, next){
     }
     res.redirect('/users/login');
 }
+
 
 app.listen(PORT, ()=>{
     console.log(`App listening at http://localhost:${PORT}`);

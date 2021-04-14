@@ -132,7 +132,7 @@
             </div>
           </div>
           <div class="topnav-right">
-            <a href="/users/assets" style="text-align: right;">Hello <%= user.charAt(0).toUpperCase() + user.slice(1) %></a>
+            <a href="/users/assets"  style="text-align: right;">Hello <%= user.charAt(0).toUpperCase() + user.slice(1) %></a>
             <a href="/users/logout">Logout</a>
             
           </div> 
@@ -152,7 +152,54 @@
         
         </script>
    
-    <h1>Test</h1>
+    
+    <h1>Asset Overview</h1>
+    
+    <h3><a href="/users/chart">Trade</a>         Bitcoin:<%= btc %></h3>
+    <h3><a href="/users/chart">Trade</a>Ethereum:<%= eth %></h3>
+    <h3><a href="/users/chart">Trade</a>XRP:<%= xrp %></h3>
+    <br><br>
+
+    
+    <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color:rgb(255, 255, 255);border-style:solid;border-left-width:100px;border-bottom-width:100px;font-family:Arial, Helvetica, sans-serif, sans-serif;font-size:20px;
+          overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{border-color:rgb(255, 255, 255);border-style:solid;border-width:100px;font-family:Arial, sans-serif;font-size:14px;
+          font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-nrix{text-align:center;vertical-align:middle}
+        .tg .tg-0lax{text-align:left;vertical-align:top}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-nrix">Coin</th>
+            <th class="tg-0lax">Total</th>
+            <th class="tg-0lax">Orders</th>
+            <th class="tg-0lax">Trade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-0lax">BTC</td>
+            <td class="tg-0lax"><%= btc %></td>
+            <td class="tg-0lax">0</td>
+            <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax">ETH</td>
+            <td class="tg-0lax"><%= eth %></td>
+            <td class="tg-0lax">0</td>
+            <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax">XRP</td>
+            <td class="tg-0lax"><%= xrp %></td>
+            <td class="tg-0lax">0</td>
+            <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
+          </tr>
+        </tbody>
+        </table>
 
 </body>
 </html>
