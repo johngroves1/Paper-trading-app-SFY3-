@@ -9,54 +9,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        body {
-            background-image: url("/images/stock.jpg");
-        }
     </style>
 </head>
 <body id="test">
     <script src="/users/style"></script>
 
-    <img alt="Poster" id="poster" src="/users/images">
-    
-
-    <div class="card text-dark bg-light mb-3" id="cardbody">
-        <div class="card-body" id="card">
-            <div class="row" >
-                <div class="col-sm-80">
-                    <div>
-                        <h1 id="loginTitle">Login Account</h1>
+    <div id="login">
+        <img alt="Poster" src="/users/images" id="loginimage">
         
-                        <ul>
-                            <% if(messages.success_msg) { %>
-                                <li><%= messages.success_msg %></li>
-                                <% } %>
-                        </ul>
+
+        <div class="card text-dark bg-light mb-3" id="cardbody">
+            <div class="card-body" id="card">
+                <div class="row" >
+                    <div class="col-sm-80">
+                        <div>
+                            <h1 id="loginTitle">Login Account</h1>
+            
+                            <ul>
+                                <% if(messages.success_msg) { %>
+                                    <li><%= messages.success_msg %></li>
+                                    <% } %>
+                            </ul>
+                            
+                            <ul>
+                                <% if(messages.error ){ %>
+                                    <li><%= messages.error %></li>
+                            <%   } %>
+                            </ul>
                         
-                        <ul>
-                            <% if(messages.error ){ %>
-                                <li><%= messages.error %></li>
-                         <%   } %>
-                        </ul>
-                    
-                        <form action="/users/login" method="POST">
-                            <div id="input1">
-                                <input type="email" id="email" name="email" placeholder="Email" required>
-                            </div>
-                            <div id="input2">
-                                <input type="password" id="password" name="password" placeholder="Password" required>
-                            </div>
-                            <div class="row justify-content-center">
-                                <button type="submit" class="btn btn-info" value="Login" id="loginBtn">Start Trading</button>
-        
-                            </div>
-                            <a href="/users/register">Dont have an account? Click here to Register</a>
-                        </form>
+                            <form action="/users/login" method="POST">
+                                <div id="input1">
+                                    <input type="email" id="email" name="email" placeholder="Email" required>
+                                </div>
+                                <div id="input2">
+                                    <input type="password" id="password" name="password" placeholder="Password" required>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <button type="submit" class="btn btn-info" value="Login" id="loginBtn">Start Trading</button>
+            
+                                </div>
+                                <a href="/users/register">Dont have an account? Click here to Register</a>
+                            </form>
+                        </div>
                     </div>
-                </div>
+            </div>
         </div>
-      </div>
-
+    </div>
       
   
    

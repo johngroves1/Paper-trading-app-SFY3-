@@ -33,7 +33,6 @@ app.use(passport.session());
 
 app.use(flash());
 
-//app.use("/users/chart", chart)
 
 app.get('/', (req, res)=>{
     res.render('login');
@@ -56,7 +55,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
 });
 
 app.get("/users/javascript", (req, res) => {
-    res.sendFile(path.join(__dirname, "/chart.js"));
+    res.sendFile(path.join(__dirname, "/charts/chart.js"));
 });
 
 app.get("/users/style", (req, res) => {
@@ -68,11 +67,27 @@ app.get("/users/style", (req, res) => {
 });
 
 app.get("/users/images", (req, res) => {
-    res.sendFile(path.join(__dirname, "/Homepage.jpg"));
+    res.sendFile(path.join(__dirname, "/homeimage.png"));
 });
 
-app.get('/users/chart', (req, res) => {
-    res.render("chart");
+app.get("/users/btcI", (req, res) => {
+    res.sendFile(path.join(__dirname, "/images/bitcoin.png"));
+});
+
+app.get("/users/ethI", (req, res) => {
+    res.sendFile(path.join(__dirname, "/images/ethereum.png"));
+});
+
+app.get("/users/xrpI", (req, res) => {
+    res.sendFile(path.join(__dirname, "/images/xrp.png"));
+});
+
+app.get("/users/bnbI", (req, res) => {
+    res.sendFile(path.join(__dirname, "/images/bnb.png"));
+});
+
+app.get("/users/adaI", (req, res) => {
+    res.sendFile(path.join(__dirname, "/images/ada.png"));
 });
 
 app.get('/users/assets', checkNotAuthenticated, (req, res) => {

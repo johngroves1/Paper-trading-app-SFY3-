@@ -9,6 +9,29 @@
     width: 400px;
     margin-bottom: 100%;
 }
+#login{
+    margin-bottom: auto;
+    display: flex;
+    
+    width: 100vh;
+    margin-right: 0%;
+}
+
+#loginimage{
+    
+   
+    max-height: 100vh;
+    margin:auto;
+    
+    
+    
+}
+
+#dashboard{
+    margin-left: auto;
+    margin-right: auto;
+    width: 8em;
+}
 
 #input1{
     align-self: center;
