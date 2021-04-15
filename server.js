@@ -36,7 +36,7 @@ app.use(flash());
 //app.use("/users/chart", chart)
 
 app.get('/', (req, res)=>{
-    res.render('index');
+    res.render('login');
 });
 
 app.get('/users/register', checkAuthenticated, (req, res) => {

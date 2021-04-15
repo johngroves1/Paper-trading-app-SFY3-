@@ -9,8 +9,18 @@
       margin-left: 10%;
       margin-right: 10%;
       font-family: Arial;
-      background-color: rgb(71, 71, 105);
-;
+      background-color: #03041c;
+      color: #ffffff;
+    }
+
+    .button {
+
+      border: 1px solid green;
+    }
+
+    .myDiv {
+      float: left;
+      padding: 2%;
     }
 
     .topnav {
@@ -136,7 +146,7 @@
     }
   </style>
 
-  
+
 </head>
 
 <body>
@@ -154,7 +164,7 @@
       </div>
     </div>
     <div class="topnav-right">
-      <a href="/users/assets"  style="text-align: right;">Hello <%= user.charAt(0).toUpperCase() + user.slice(1) %></a>
+      <a href="/users/assets" style="text-align: right;">Hello <%= user.charAt(0).toUpperCase() + user.slice(1) %></a>
       <a href="/users/logout">Logout</a>
 
     </div>
@@ -185,6 +195,10 @@
   </head>
 
   <body>
+    <button onclick="chart4h()">4h</button>
+    <button onclick="chart1m()">1m</button>
+    <button onclick="chart1d()">1d</button>
+
     <h2 id="symbolPrice"></h2>
     <div id="tvchart"></div>
   </body>
@@ -197,38 +211,77 @@
 
 
 
-  <h3>Market Order</h3>
-  <form action="/users/chart" method="POST">
-    <div id="input1">
-      <input type="hidden" id="id" name="id" value=<%- test %> required>
-    </div>
-    <div id="input1">
-      <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
-    </div>
-    <div class="row justify-content-center">
-      <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
-    </div>
-    <a href="/users/dashboard"></a>
-  </form>
+  <div class="myDiv">
+    <h3>Market Buy Order</h3>
+    <form action="/users/chart" method="POST">
+      <div>
+        <input type="hidden" id="id" name="id" value=<%- test %> required>
+      </div>
+      <div>
+        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
+      </div>
+      <a href="/users/dashboard"></a>
+    </form>
+  </div>
+  <div class="myDiv">
+    <h3>Market Sell Order</h3>
+    <form action="/users/chart" method="POST">
+      <div>
+        <input type="hidden" id="id" name="id" value=<%- test %> required>
+      </div>
+      <div>
+        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
+      </div>
+      <a href="/users/dashboard"></a>
+    </form>
+  </div>
+
+  <div class="myDiv">
+    <h3>Limit Buy Order</h3>
+    <form action="/users/chartss" method="POST">
+      <div>
+        <input type="hidden" id="id" name="id" value=<%- test %> required>
+      </div>
+      <div>
+        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+      </div>
+      <div>
+        <input type="number" id="usdt" name="usdt" placeholder="usdt" required>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
+      </div>
+      <a href="/users/dashboard"></a>
+    </form>
+  </div>
+
+  <div class="myDiv">
+    <h3>Limit Buy Order</h3>
+    <form action="/users/chartss" method="POST">
+      <div>
+        <input type="hidden" id="id" name="id" value=<%- test %> required>
+      </div>
+      <div>
+        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+      </div>
+      <div>
+        <input type="number" id="usdt" name="usdt" placeholder="usdt" required>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
+      </div>
+      <a href="/users/dashboard"></a>
+    </form>
+  </div>
+  <br><br>
 
 
-
-  <button onclick="marketOrderB()">Buy</button><br>
-  <p id="order1"></p>
-  <p id="order1price"></p>
-  <p id="order1amount"></p>
-
-  <h3>Limit Order</h3>
-  <label for="amountLimit">Amount USDT:</label>
-  <input type="number" id="amountLimit" name="amountLimit"><br><br>
-  <label for="priceLimit">Price :</label>
-  <input type="number" id="priceLimit" name="priceLimit"><br><br>
-
-  <button onclick="limitOrderB()">Buy</button><br>
-  <p id="limit1"></p>
-  <p id="limit1price"></p>
-  <p id="limit1amount"></p>
-  <p id="limit1time"></p>
 
 
   <script src="/users/javascript"></script>
