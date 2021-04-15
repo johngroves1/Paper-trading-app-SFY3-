@@ -68,7 +68,7 @@ app.get("/users/style", (req, res) => {
 });
 
 app.get("/users/images", (req, res) => {
-    res.sendFile(path.join(__dirname, "/images/stock.jpg"));
+    res.sendFile(path.join(__dirname, "/Homepage.jpg"));
 });
 
 app.get('/users/chart', (req, res) => {
