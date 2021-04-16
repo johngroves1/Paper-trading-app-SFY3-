@@ -109,6 +109,10 @@ app.get("/users/javascript", (req, res) => {
     res.sendFile(path.join(__dirname, "/charts/chart.js"));
 });
 
+app.get("/users/assetsjs", (req, res) => {
+    res.sendFile(path.join(__dirname, "/charts/assets.js"));
+});
+
 app.get("/users/style", (req, res) => {
     res.sendFile(path.join(__dirname, "/style.css"));
 });

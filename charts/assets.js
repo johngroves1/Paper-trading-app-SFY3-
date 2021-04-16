@@ -12,7 +12,7 @@
 //Code
 const log = console.log;
 
-const chartProperties = {
+/* const chartProperties = {
   width: 1500,
   height: 600,
   layout: {
@@ -34,8 +34,8 @@ const chartProperties = {
 }
 
 const domElement = document.getElementById('tvchart');
-const chart = LightweightCharts.createChart(domElement, chartProperties);
-const candleSeries = chart.addCandlestickSeries();
+//const chart = LightweightCharts.createChart(domElement, chartProperties);
+//const candleSeries = chart.addCandlestickSeries();
 
 fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=50000`)
   .then(res => res.json())
@@ -43,7 +43,7 @@ fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/kl
     const cdata = data.map(d => {
       return { time: d[0] / 1000, open: parseFloat(d[1]), high: parseFloat(d[2]), low: parseFloat(d[3]), close: parseFloat(d[4]) }
     });
-    candleSeries.setData(cdata);
+    //candleSeries.setData(cdata);
     cdata.forEach(e => {
       //log(e.high);
       if (e.high > 50000) {
@@ -54,7 +54,7 @@ fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/kl
 
     });
   })
-  .catch(err => log(err))
+  .catch(err => log(err)) */
 
 //Dynamic Chart
 const socket = io.connect('http://127.0.0.1:3000/');
