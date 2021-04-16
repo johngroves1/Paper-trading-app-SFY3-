@@ -37,13 +37,6 @@ const domElement = document.getElementById('tvchart');
 const chart = LightweightCharts.createChart(domElement, chartProperties);
 const candleSeries = chart.addCandlestickSeries();
 
-var total = 1000000.00;
-document.getElementById('output').innerHTML = "Wallet: " + "$" + total;
-
-
-
-
-
 fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=50000`)
   .then(res => res.json())
   .then(data => {
@@ -74,7 +67,7 @@ var chartTime = "KLINE_BTC_1d";
 socket.on(chartTime, (pl) => {
   log(pl.open + "Not Yurt");
   candleSeries.update(pl);
-  document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
+  //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
 
 
 
@@ -83,7 +76,7 @@ socket.on(chartTime, (pl) => {
 socket.on('KLINE_BTC_1m', (pl) => {
   log(pl.open + "Yurt");
   //candleSeries.update(pl);
-  //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.close;
+  document.forms[1].coin.value = pl.close;
 
 
 

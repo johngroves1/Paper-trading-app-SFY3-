@@ -14,7 +14,7 @@
     }
 
     button {
-      
+
       border: 1px solid black;
     }
 
@@ -199,54 +199,98 @@
     <button onclick="chart1m()">1m</button>
     <button onclick="chart1d()">1d</button>
 
-    <h2 id="symbolPrice"></h2>
+    <h2>BTC|USD</h2>
     <div id="tvchart"></div>
   </body>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="/users/javascript"></script>
 
-  <h2 id="output"></h2>
+  <h2>Wallet: $<%- usd %></h2>
 
-  
+
+
 
 
 
   <div class="myDiv">
     <h3>Market Buy Order</h3>
-    <form action="/users/chart" method="POST">
+    <form id="marketBuy" action="/users/chart" method="POST">
       <div>
         <input type="hidden" id="id" name="id" value=<%- test %> required>
       </div>
       <div>
-        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+        <input type="hidden" id="buy" name="buy" value="1" required>
       </div>
       <div>
-        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
+        <input type="hidden" id="coin" name="coin" required>
       </div>
+      <div>
+        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+      </div>
+      
       <a href="/users/dashboard"></a>
     </form>
+    <button onclick="marketBuy()">Buy</button><br>
   </div>
+  <script>
+    function marketBuy() {
+      socket.once('KLINE_BTC_1m', (pl) => {
+        log(pl.open);
+        //candleSeries.update(pl);
+        //document.forms[1].coin.value = pl.close;
+        var amountBuyBTC = document.getElementById('bitcoin').value;
+        var amountBuyUSD = pl.close * amountBuyBTC;
+        document.getElementById('coin').value = amountBuyUSD;
+        document.getElementById("marketBuy").submit();
+
+      });
+    }
+  </script>
   <div class="myDiv">
     <h3>Market Sell Order</h3>
-    <form action="/users/chart" method="POST">
+    <form id="marketSell" action="/users/chart" method="POST">
       <div>
         <input type="hidden" id="id" name="id" value=<%- test %> required>
       </div>
       <div>
-        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+        <input type="hidden" id="coin" name="coin" value="" required>
       </div>
       <div>
-        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
+        <input type="hidden" id="buy" name="buy" value="0" required>
+      </div>
+      <div>
+        <input type="number" id="bitcoin1" name="bitcoin" placeholder="bitcoin" required>
       </div>
       <a href="/users/dashboard"></a>
     </form>
+    <button onclick="marketSell()">Sell</button><br>
   </div>
+  <script>
+    function marketSell() {
+      socket.once('KLINE_BTC_1m', (pl) => {
+        log(pl.open);
+        //candleSeries.update(pl);
+        //document.forms[1].coin.value = pl.close;
+        var amountSellBTC = document.getElementById('bitcoin1').value;
+        log(amountSellBTC);
+        var amountSellUSD = pl.close * amountSellBTC;
+        log(amountSellUSD);
+        document.getElementById('coin').value = amountSellUSD;
+        document.getElementById("marketSell").submit();
+
+      });
+    }
+  </script>
 
   <div class="myDiv">
     <h3>Limit Buy Order</h3>
     <form action="/users/chartss" method="POST">
       <div>
         <input type="hidden" id="id" name="id" value=<%- test %> required>
+      </div>
+      <div>
+        <input type="hidden" id="buy" name="buy" value="0" required>
       </div>
       <div>
         <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
@@ -284,7 +328,7 @@
 
 
 
-  <script src="/users/javascript"></script>
+
 
 
 
