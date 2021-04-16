@@ -260,7 +260,7 @@
         <input type="hidden" id="buy" name="buy" value="0" required>
       </div>
       <div>
-        <input type="number" id="bitcoin1" name="bitcoin" placeholder="bitcoin" required>
+        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
       </div>
       <a href="/users/dashboard"></a>
     </form>
@@ -272,7 +272,7 @@
         log(pl.open);
         //candleSeries.update(pl);
         //document.forms[1].coin.value = pl.close;
-        var amountSellBTC = document.getElementById('bitcoin1').value;
+        var amountSellBTC = document.getElementById('bitcoin').value;
         log(amountSellBTC);
         var amountSellUSD = pl.close * amountSellBTC;
         log(amountSellUSD);

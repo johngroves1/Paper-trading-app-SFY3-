@@ -253,8 +253,10 @@ app.post('/users/chart', (req, res) => {
     //let {bitcoin} = req.body;
     console.log(req.body.id);
     console.log(req.body.bitcoin);
-    console.log(req.body.bitcoin1);
+    //console.log(req.body.bitcoin1);
     console.log(req.body.coin);
+    var amount = req.body.bitcoin * req.body.coin;
+    console.log(amount);
     //res.redirect('/users/chart');
 
     pool.query(
@@ -263,7 +265,7 @@ app.post('/users/chart', (req, res) => {
         if (err) {
             throw err
         }
-        console.log(results.rows);
+        //console.log(results.rows);
         var coin = `bitcoin`;
 
 
@@ -276,7 +278,7 @@ app.post('/users/chart', (req, res) => {
                     if (err) {
                         throw err
                     }
-                    console.log(results.rows);
+                    //console.log(results.rows);
                     // req.flash('success_msg', "You are now registered. Please log in");
                     //res.redirect('/users/chart');
                 }
@@ -284,12 +286,12 @@ app.post('/users/chart', (req, res) => {
 
             } else {
                 pool.query(
-                    `UPDATE wallet SET bitcoin = bitcoin + $1, usd = usd + $3
-                            WHERE id =$2`, [req.body.bitcoin1, req.body.id, req.body.coin], (err, results) => {
+                    `UPDATE wallet SET bitcoin = bitcoin - $1, usd = usd + $3
+                            WHERE id =$2`, [req.body.bitcoin, req.body.id, amount], (err, results) => {
                     if (err) {
                         throw err
                     }
-                    console.log(results.rows);
+                    //console.log(results.rows);
                     // req.flash('success_msg', "You are now registered. Please log in");
                     //res.redirect('/users/chart');
                 }
