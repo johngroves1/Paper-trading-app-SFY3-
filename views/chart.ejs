@@ -228,7 +228,7 @@
       <div>
         <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
       </div>
-      
+
       <a href="/users/dashboard"></a>
     </form>
     <button onclick="marketBuy()">Buy</button><br>
@@ -285,25 +285,41 @@
 
   <div class="myDiv">
     <h3>Limit Buy Order</h3>
-    <form action="/users/chartss" method="POST">
+    <form id="limitBuy" action="/users/btcLimitBuy" method="POST">
       <div>
-        <input type="hidden" id="id" name="id" value=<%- test %> required>
+        <input type="hidden" id="id" name="id" value=<%- walletid %> required>
       </div>
       <div>
-        <input type="hidden" id="buy" name="buy" value="0" required>
+        <input type="hidden" id="coin" name="coin" value="btc" required>
       </div>
       <div>
-        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
+        <input type="hidden" id="type" name="type" value="limitBuy" required>
       </div>
       <div>
-        <input type="number" id="usdt" name="usdt" placeholder="usdt" required>
+        <input type="hidden" id="time" name="time" value="" required>
       </div>
       <div>
-        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
+        <input type="number" id="bitcoin" name="bitcoin" placeholder="Amount BTC" required>
+      </div>
+      <div>
+        <input type="number" id="usd" name="usd" placeholder="Amount USD" required>
       </div>
       <a href="/users/dashboard"></a>
     </form>
+    <button onclick="limitBuy()">Limit Buy</button><br>
   </div>
+  
+  <script>
+    function limitBuy() {
+      socket.once('KLINE_BTC_1d', (pl) => {
+        log(pl.time);
+
+        document.getElementById('time').value = pl.time;
+        document.getElementById("limitBuy").submit();
+
+      });
+    }
+  </script>
 
   <div class="myDiv">
     <h3>Limit Buy Order</h3>

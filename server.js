@@ -99,7 +99,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
 
         res.render("chart", {
             user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
-            usd: results.rows[0].usd
+            usd: results.rows[0].usd, walletid: results.rows[0].walletid
         });
     }
     );
@@ -110,6 +110,8 @@ app.get("/users/javascript", (req, res) => {
 });
 
 app.get("/users/assetsjs", (req, res) => {
+
+
     res.sendFile(path.join(__dirname, "/charts/assets.js"));
 });
 
@@ -152,14 +154,28 @@ app.get('/users/assets', checkNotAuthenticated, (req, res) => {
         `SELECT * FROM wallet
         WHERE id = $1`, [req.user.id], (err, results) => {
         console.log(results.rows);
+        pool.query(
+            `SELECT * FROM trades
+            WHERE walletid = $1`, [results.rows[0].walletid], (err, result) => {
+            if (err) {
+                throw err
+            }
+            console.log(result.rows);
+            res.render("assets", {
+                user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
+                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, amount: result.rows[0].amount
+            });
+            //req.flash('success_msg', "You are now registered. Please log in");
+
+        }
+        )
+
+
         //console.log(req.body.id)
         //res.render("assets", { btc: results.bitcoin});
         //console.log(results.rows[0]);
         //console.log(results.rows[0].bitcoin);
-        res.render("assets", {
-            user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
-            eth: results.rows[0].ethereum, xrp: results.rows[0].xrp
-        });
+        
         //res.render("assets", { btc: results.rows[0].bitcoin})
     }
     );
@@ -234,7 +250,7 @@ app.post('/users/register', async (req, res) => {
 
                         }
                     )
-                    
+
                 }
                 )
 
@@ -322,6 +338,31 @@ app.post('/users/chart', (req, res) => {
 
         }
     })
+    res.redirect('/users/chart');
+
+})
+
+app.post('/users/btcLimitBuy', (req, res) => {
+    //let {bitcoin} = req.body;
+    console.log(req.body.id);
+    console.log(req.body.bitcoin);
+    //console.log(req.body.bitcoin1);
+    console.log(req.body.coin);
+    var amount = req.body.bitcoin * req.body.coin;
+    console.log(amount);
+    //res.redirect('/users/chart');
+
+    pool.query(
+        `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bitcoin, req.body.usd, req.body.coin, req.body.type, req.body.time], (err, results) => {
+            if (err) {
+                throw err
+            }
+            //console.log(results.rows);
+            var coin = `bitcoin`;
+
+
+
+        })
     res.redirect('/users/chart');
 
 })

@@ -211,7 +211,7 @@
     }
 
     .tg .tg-0lax {
-      text-align: center;
+      text-align: left;
       vertical-align: top
     }
   </style>
@@ -231,7 +231,7 @@
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/btcI" width="40px" height="40px"></td>
         <td id="amountBTC" class="tg-0lax"><%= btc %></td>
-        <td class="tg-0lax">0</td>
+        <td class="tg-0lax"><%= amount %></td>
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
         <td id="amountUSD" class="tg-0lax">loading...</td>
         <td id="btcPrice" class="tg-0lax">loading...</td>
@@ -287,6 +287,7 @@
       //candleSeries.update(pl);
       var percentage = 0;
       //document.forms[1].coin.value = pl.close;
+      console.log();
       var amountUSD = document.getElementById('amountBTC').innerHTML * pl.close;
       console.log("amountUSD" + amountUSD);
       document.getElementById('amountUSD').innerHTML = amountUSD + " USD";
