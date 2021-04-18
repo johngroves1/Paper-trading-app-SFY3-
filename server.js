@@ -161,9 +161,14 @@ app.get('/users/assets', checkNotAuthenticated, (req, res) => {
                 throw err
             }
             console.log(result.rows);
+            var amountTrade = 0;
+            if (result.rows.length > 0) {
+                //errors.push({ message: "Email already registed" });
+                amountTrade = result.rows[0].amount;
+            }
             res.render("assets", {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
-                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, amount: result.rows[0].amount
+                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, amount: amountTrade
             });
             //req.flash('success_msg', "You are now registered. Please log in");
 
