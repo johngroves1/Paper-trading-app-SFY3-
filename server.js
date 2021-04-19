@@ -8,6 +8,7 @@ const flash = require('express-flash');
 const passport = require('passport');
 const path = require("path");
 const api = require('binance');
+const fetch = require("node-fetch");
 
 
 console.log("poo");
@@ -71,10 +72,47 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
         `SELECT * FROM wallet
         WHERE id = $1`, [req.user.id], (err, results) => {
         console.log(results.rows);
-        //console.log(req.body.id)
-        //res.render("assets", { btc: results.bitcoin});
-        //console.log(results.rows[0]);
-        //console.log(results.rows[0].bitcoin);
+        pool.query(
+            `SELECT * FROM trades
+            WHERE walletid = $1`, [results.rows[0].walletid], (err, result) => {
+            if (err) {
+                throw err
+            }
+            console.log(result.rows);
+            var amountTrade = 0;
+            if (result.rows.length > 0) {
+                //errors.push({ message: "Email already registed" });
+                amountTrade = result.rows[0].amount;
+            }
+
+            fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=50000`)
+            .then(result => result.json())
+            .then(data => {
+                const cdata = data.map(d => {
+                    return { time: d[0] / 1000, open: parseFloat(d[1]), high: parseFloat(d[2]), low: parseFloat(d[3]), close: parseFloat(d[4]) }
+                });
+                console.log("result.rows[0].time");
+                console.log()
+                cdata.forEach(e => {
+                    //log(e.high);
+                    if (e.high > amountUSD && e.time >= result.rows[0].time) {
+                        // log(e.time);
+                        //log(e.high);
+                        console.log("ORDER SUCCESFUL")
+                    }
+    
+                });
+            })
+            .catch(err => log(err)) 
+
+            res.render("chart", {
+                user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
+                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, amount: amountTrade, usd: results.rows[0].usd, walletid: results.rows[0].walletid
+            });
+            //req.flash('success_msg', "You are now registered. Please log in");
+
+        }
+        )
 
 
         /* fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=50000`)
@@ -97,10 +135,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
             .catch(err => log(err)) */
 
 
-        res.render("chart", {
-            user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
-            usd: results.rows[0].usd, walletid: results.rows[0].walletid
-        });
+
     }
     );
 });
@@ -180,7 +215,7 @@ app.get('/users/assets', checkNotAuthenticated, (req, res) => {
         //res.render("assets", { btc: results.bitcoin});
         //console.log(results.rows[0]);
         //console.log(results.rows[0].bitcoin);
-        
+
         //res.render("assets", { btc: results.rows[0].bitcoin})
     }
     );

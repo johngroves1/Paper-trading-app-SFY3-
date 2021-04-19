@@ -64,7 +64,7 @@ var chartTime = "KLINE_BTC_1d";
 //var chart4h = "KLINE_BTC_4h";
 
 
-socket.on(chartTime, (pl) => {
+socket1.on(chartTime, (pl) => {
   log(pl.open + "Not Yurt");
   candleSeries.update(pl);
   //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
@@ -73,21 +73,21 @@ socket.on(chartTime, (pl) => {
 
 });
 
-socket.on('KLINE_BTC_1m', (pl) => {
+/* /* socket.on('KLINE_BTC_1m', (pl) => {
   log(pl.open + "Yurt");
   //candleSeries.update(pl);
   document.forms[1].coin.value = pl.close;
 
 
 
-});
+}); 
 
 socket.on('KLINE_BTC_4h', (pl) => {
   log(pl.open + "Yurty McYurt");
   //candleSeries.update(pl);
   //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.close;
 
-});
+}); */
 
 
 function limitOrderB() {
@@ -127,13 +127,34 @@ function limitOrderB() {
 }
 
 function chart4h() {
+  socket1.off(chartTime);
 
   chartTime = "KLINE_BTC_4h";
+
+  fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=4h&limit=50000`)
+    .then(res => res.json())
+    .then(data => {
+      const cdata = data.map(d => {
+        return { time: d[0] / 1000, open: parseFloat(d[1]), high: parseFloat(d[2]), low: parseFloat(d[3]), close: parseFloat(d[4]) }
+      });
+      candleSeries.setData(cdata);
+      cdata.forEach(e => {
+        //log(e.high);
+        if (e.high > 50000) {
+          // log(e.time);
+          //log(e.high);
+          // log("ORDER SUCCESFUL")
+        }
+
+      });
+    })
+    .catch(err => log(err))
 
   socket.on(chartTime, (pl) => {
     log(pl.open + "Not Yurt");
     candleSeries.update(pl);
-    document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
+    //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
+    
 
 
 
@@ -162,12 +183,14 @@ function chart4h() {
 }
 function chart1d() {
 
+  socket1.off(chartTime);
+
   chartTime = "KLINE_BTC_1d";
 
   socket.on(chartTime, (pl) => {
     log(pl.open + "Not Yurt");
     candleSeries.update(pl);
-    document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
+    //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
 
 
 
@@ -198,11 +221,12 @@ function chart1d() {
 function chart1m() {
 
   chartTime = "KLINE_BTC_1m";
+  socket1.off(chartTime);
 
   socket.on(chartTime, (pl) => {
     log(pl.open + "Not Yurt");
     candleSeries.update(pl);
-    document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
+    //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
 
 
 
