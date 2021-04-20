@@ -438,6 +438,45 @@ app.post('/users/btcLimitBuy', (req, res) => {
     res.redirect('/users/chart');
 
 })
+app.post('/users/btcLimitSell', (req, res) => {
+    //let {bitcoin} = req.body;
+    console.log(req.body.id);
+    console.log(req.body.bitcoin);
+    console.log(req.body.coin);
+    console.log(req.body.type);
+    console.log(req.body.time);
+    //console.log(req.body.bitcoin1);
+    console.log(req.body.coin);
+    var amount = req.body.bitcoin * req.body.usd;
+    console.log(amount);
+    //res.redirect('/users/chart');
+
+    pool.query(
+        `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bitcoin, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
+            if (err) {
+                throw err
+            }
+            //console.log(results.rows);
+            var coin = `bitcoin`;
+
+
+
+        })
+        pool.query(
+            `UPDATE wallet SET bitcoin = bitcoin - $2
+            WHERE walletid =$1`, [req.body.id, req.body.bitcoin], (err, results) => {
+                if (err) {
+                    throw err
+                }
+                console.log("cheese");
+                var coin = `bitcoin`;
+    
+    
+    
+            }) 
+    res.redirect('/users/chart');
+
+})
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {

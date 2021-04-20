@@ -248,7 +248,7 @@
         var amountBuyUSD = pl.close * amountBuyBTC;
         document.getElementById('coin').value = amountBuyUSD;
         //document.getElementById("marketBuy").submit();
-        
+
         if (document.getElementById('wallet').value >= amountBuyUSD) {
           document.getElementById("marketBuy").submit();
           console.log("pussy")
@@ -293,7 +293,7 @@
         var amountSellUSD = pl.close * amountSellBTC;
         log(amountSellUSD);
         document.getElementById('coin1').value = amountSellUSD;
-        
+
         //document.getElementById("marketSell").submit();
         if (document.getElementById('btcWallet').value >= document.getElementById('bitcoin1').value) {
           document.getElementById("marketSell").submit();
@@ -333,7 +333,7 @@
     </form>
     <button onclick="limitBuy()">Limit Buy</button><br>
   </div>
-  
+
   <script>
     function limitBuy() {
       socket.once('KLINE_BTC_1d', (pl) => {
@@ -343,8 +343,55 @@
         //document.getElementById("limitBuy").submit();
         var enoughUSD = document.getElementById('bitcoin3').value * document.getElementById('usd').value;
         log(enoughUSD);
-        if (document.getElementById('bitcoinAmount').value >= enoughUSD) {
+        if (document.getElementById('wallet').value >= enoughUSD) {
           document.getElementById("limitBuy").submit();
+          document.getElementById('enoughWallet').innerHTML = "Order Submitted";
+          console.log("pussy")
+        } else {
+          document.getElementById('enoughWallet').innerHTML = "Insufficient USD To Complete Limit Buy Order";
+          console.log(" not pussy")
+        }
+
+      });
+    }
+  </script>
+
+  <div class="myDiv">
+    <h3>Limit Sell Order</h3>
+    <form id="limitSell" action="/users/btcLimitSell" method="POST">
+      <div>
+        <input type="hidden" id="id" name="id" value=<%- walletid %> required>
+      </div>
+      <div>
+        <input type="hidden" id="coin" name="coin" value="btc" required>
+      </div>
+      <div>
+        <input type="hidden" id="type" name="type" value="limitSell" required>
+      </div>
+      <div>
+        <input type="hidden" id="time4" name="time" value="" required>
+      </div>
+      <div>
+        <input type="number" id="bitcoin4" name="bitcoin" placeholder="Amount BTC" required>
+      </div>
+      <div>
+        <input type="number" id="usd4" name="usd" placeholder="Amount USD" required>
+      </div>
+      <a href="/users/dashboard"></a>
+    </form>
+    <button onclick="limitSell()">Limit Buy</button><br>
+  </div>
+  <script>
+    function limitSell() {
+      socket.once('KLINE_BTC_1d', (pl) => {
+        log(pl.time);
+
+        document.getElementById('time4').value = pl.time;
+        //document.getElementById("limitBuy").submit();
+        //var enoughUSD = document.getElementById('bitcoin4').value * document.getElementById('usd4').value;
+        //log(enoughUSD);
+        if (document.getElementById('btcWallet').value >= document.getElementById('bitcoin4').value) {
+          document.getElementById("limitSell").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
           console.log("pussy")
         } else {
@@ -355,25 +402,6 @@
       });
     }
   </script>
-
-  <div class="myDiv">
-    <h3>Limit Buy Order</h3>
-    <form action="/users/chartss" method="POST">
-      <div>
-        <input type="hidden" id="id" name="id" value=<%- test %> required>
-      </div>
-      <div>
-        <input type="number" id="bitcoin" name="bitcoin" placeholder="bitcoin" required>
-      </div>
-      <div>
-        <input type="number" id="usdt" name="usdt" placeholder="usdt" required>
-      </div>
-      <div>
-        <button type="submit" class="btn btn-info" value="Buy" id="BuyBtn">Buy Coin</button>
-      </div>
-      <a href="/users/dashboard"></a>
-    </form>
-  </div>
   <br><br>
 
 
