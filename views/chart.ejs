@@ -250,7 +250,7 @@
         //document.getElementById("marketBuy").submit();
         
         if (document.getElementById('wallet').value >= amountBuyUSD) {
-          //document.getElementById("marketBuy").submit();
+          document.getElementById("marketBuy").submit();
           console.log("pussy")
         } else {
           document.getElementById('enoughWallet').innerHTML = "* Insufficient Funds To Complete Market Buy Order";
@@ -295,13 +295,13 @@
         document.getElementById('coin1').value = amountSellUSD;
         
         //document.getElementById("marketSell").submit();
-        if (document.getElementById('btcWallet').value >= amountSellUSD) {
-          //document.getElementById("marketSell").submit();
+        if (document.getElementById('btcWallet').value >= document.getElementById('bitcoin1').value) {
+          document.getElementById("marketSell").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
-          console.log("pussy")
+
         } else {
           document.getElementById('enoughWallet').innerHTML = "* Insufficient Funds To Complete Market Sell Order";
-          console.log(" not pussy")
+
         }
 
       });
