@@ -91,12 +91,14 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                         // console.log();
                         var filled = false;
                         console.log(parseFloat(result.rows[0].amountusd));
+   
                         cdata.forEach(e => {
+
                             //log(e.high);
-                            if (e.low <= parseFloat(result.rows[0].amountusd) && e.time >= result.rows[0].time && filled == false) {
+                            if (e.low <= 70000 && e.time >= result.rows[0].time && filled == false && result.rows[0].type == "limitBuy") {
                                 pool.query(
-                                    `UPDATE wallet SET usd = usd - $2, bitcoin = bitcoin + $1
-                                        WHERE id =$3`, [result.rows[0].amount, parseFloat(result.rows[0].amountusd), req.user.id], (err, data) => {
+                                    `UPDATE wallet SET bitcoin = bitcoin + $1
+                                        WHERE id =$2`, [result.rows[0].amount, req.user.id], (err, data) => {
                                     if (err) {
                                         throw err
                                     }
@@ -106,6 +108,20 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                                 )
                                 pool.query(
                                     `DELETE FROM trades WHERE tradeid = $1`, [result.rows[0].tradeid], (err, data) => {
+                                        if (err) {
+                                            throw err
+                                        }
+                                        //console.log(data.rows);
+
+                                    }
+                                )
+                                console.log("ORDER SUCCESFUL")
+                                filled = true;
+                            } else if (e.high >= 50000 && e.time >= result.rows[0].time && filled == false && result.rows[0].type == "limitSell") {
+                                console.log(parseFloat(result.rows[0].amountusd) * parseFloat(result.rows[0].amount))
+                                pool.query(
+                                    `UPDATE wallet SET usd = usd + $1
+                                        WHERE id =$2`, [parseFloat(result.rows[0].amountusd) * parseFloat(result.rows[0].amount) , req.user.id], (err, data) => {
                                     if (err) {
                                         throw err
                                     }
@@ -113,7 +129,16 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
 
                                 }
                                 )
-                                console.log("ORDER SUCCESFUL")
+                                pool.query(
+                                    `DELETE FROM trades WHERE tradeid = $1`, [result.rows[0].tradeid], (err, data) => {
+                                        if (err) {
+                                            throw err
+                                        }
+                                        //console.log(data.rows);
+
+                                    }
+                                )
+                                console.log("ORDER Sewll SUCCESFUL")
                                 filled = true;
                             }
 
@@ -127,7 +152,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
 
             res.render("chart", {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
-                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, amount: amountTrade, usd: Math.round(results.rows[0].usd * 100) / 100, walletid: results.rows[0].walletid, bitcoinWallet: results.rows[0].bitcoin 
+                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, amount: amountTrade, usd: Math.round(results.rows[0].usd * 100) / 100, walletid: results.rows[0].walletid, bitcoinWallet: results.rows[0].bitcoin
             });
             //req.flash('success_msg', "You are now registered. Please log in");
 
@@ -413,7 +438,7 @@ app.post('/users/btcLimitBuy', (req, res) => {
     //res.redirect('/users/chart');
 
     pool.query(
-        `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bitcoin, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
+        `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bitcoin, req.body.amountusd, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
                 throw err
             }
@@ -423,18 +448,18 @@ app.post('/users/btcLimitBuy', (req, res) => {
 
 
         })
-        pool.query(
-            `UPDATE wallet SET usd = usd - $2
+    pool.query(
+        `UPDATE wallet SET usd = usd - $2
             WHERE walletid =$1`, [req.body.id, amount], (err, results) => {
-                if (err) {
-                    throw err
-                }
-                console.log("cheese");
-                var coin = `bitcoin`;
-    
-    
-    
-            }) 
+        if (err) {
+            throw err
+        }
+        console.log("cheese");
+        var coin = `bitcoin`;
+
+
+
+    })
     res.redirect('/users/chart');
 
 })
@@ -452,7 +477,7 @@ app.post('/users/btcLimitSell', (req, res) => {
     //res.redirect('/users/chart');
 
     pool.query(
-        `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bitcoin, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
+        `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bitcoin, req.body.amountusd, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
                 throw err
             }
@@ -462,18 +487,18 @@ app.post('/users/btcLimitSell', (req, res) => {
 
 
         })
-        pool.query(
-            `UPDATE wallet SET bitcoin = bitcoin - $2
+    pool.query(
+        `UPDATE wallet SET bitcoin = bitcoin - $2
             WHERE walletid =$1`, [req.body.id, req.body.bitcoin], (err, results) => {
-                if (err) {
-                    throw err
-                }
-                console.log("cheese");
-                var coin = `bitcoin`;
-    
-    
-    
-            }) 
+        if (err) {
+            throw err
+        }
+        console.log("cheese");
+        var coin = `bitcoin`;
+
+
+
+    })
     res.redirect('/users/chart');
 
 })
