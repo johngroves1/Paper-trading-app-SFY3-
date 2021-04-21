@@ -414,15 +414,57 @@
     </tr>
     <% trades.forEach(function(item,index){ %>
     <tr>
-      <td> <%= item.tradeid %> </td>
+      <td id="<%= index %>"> <%= item.tradeid %> </td>
       <td> <%= item.amount %> </td>
       <td> <%= item.amountusd %> </td>
       <td> <%= item.amountusd / item.amount %> </td>
       <td> <%= item.type %> </td>
+      <td><button onclick="limitSmart('<%= item.tradeid %>', '<%= item.amount %>', '<%= item.type %>', '<%= item.amountusd %>')" type="button">Cancel</button></td>
+      
     </tr>
     <% }) %>
+    <div class="myDiv">
+      <form id="cancelTrade" action="/users/cancelTrade" method="POST">
+        <div>
+          <input type="hidden" id="tid" name="id" value="" required>
+        </div>
+        <div>
+          <input type="hidden" id="wid" name="walletid" value=<%- walletid %> required>
+        </div>
+        <div>
+          <input type="hidden" id="tamount" name="amount" value="" required>
+        </div>
+        <div>
+          <input type="hidden" id="ttype" name="type" value="" required>
+        </div>
+        <div>
+          <input type="hidden" id="tusd" name="usd" value="" required>
+        </div>
+        <a href="/users/dashboard"></a>
+      </form>
+    </div>
+
+    <script>
+      function limitSmart(id, amount, type, usd) {
+        document.getElementById('tid').value = id;
+        document.getElementById('tamount').value = amount;
+        document.getElementById('ttype').value = type;
+        document.getElementById('tusd').value = usd;
+        console.log(id + amount + type + usd);
+        document.getElementById("cancelTrade").submit();
+
+      }
+      
+    </script>
     
   </table>
+
+<!--   <script>
+    function limitSmart() {
+      document.getElementById('enoughWallet').innerHTML = document.getElementById('cool').innerHTML;
+    }
+    
+  </script> -->
 
 
 
