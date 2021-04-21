@@ -404,7 +404,25 @@
   </script>
   <br><br>
 
-
+  <table>
+    <tr>
+      <th>Trade ID</th>
+      <th>Amount BTC</th>
+      <th>Amount USD</th>
+      <th>Price</th>
+      <th>Order type</th>
+    </tr>
+    <% trades.forEach(function(item,index){ %>
+    <tr>
+      <td> <%= item.tradeid %> </td>
+      <td> <%= item.amount %> </td>
+      <td> <%= item.amountusd %> </td>
+      <td> <%= item.amountusd / item.amount %> </td>
+      <td> <%= item.type %> </td>
+    </tr>
+    <% }) %>
+    
+  </table>
 
 
 
