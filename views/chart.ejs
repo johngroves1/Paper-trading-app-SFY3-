@@ -197,7 +197,7 @@
   <body>
     
 
-    <h2 id="livePrice">BTC|USD</h2>
+    <h2 id="livePrice">BTC|USD loading...</h2>
     <h4 id="perChange">loading...</h4>
     <button onclick="chart4h()">4h</button>
     <button onclick="chart1m()">1m</button>
@@ -341,12 +341,24 @@
     function limitBuy() {
       socket.once('KLINE_BTC_1d', (pl) => {
         log(pl.time);
+        log(document.getElementById('bitcoin3').value);
+        log();
+        var amount;
+        if (document.getElementById('usd').value > pl.close) {
+          amount = pl.close;
+          log("cheese")
+        } else {
+          amount = document.getElementById('usd').value;
+        }
 
         document.getElementById('time').value = pl.time;
         //document.getElementById("limitBuy").submit();
-        var enoughUSD = document.getElementById('bitcoin3').value * document.getElementById('usd').value;
+        
+        var enoughUSD = document.getElementById('bitcoin3').value * amount;
         log(enoughUSD);
+        log(amount);
         if (document.getElementById('wallet').value >= enoughUSD) {
+          document.getElementById('usd').value = amount;
           document.getElementById("limitBuy").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
           console.log("pussy")
@@ -390,10 +402,17 @@
         log(pl.time);
 
         document.getElementById('time4').value = pl.time;
-        //document.getElementById("limitBuy").submit();
-        //var enoughUSD = document.getElementById('bitcoin4').value * document.getElementById('usd4').value;
-        //log(enoughUSD);
+
+        var amount;
+        if (document.getElementById('usd4').value < pl.close) {
+          amount = pl.close;
+          log("cheese")
+        } else {
+          amount = document.getElementById('usd4').value;
+        }
+
         if (document.getElementById('btcWallet').value >= document.getElementById('bitcoin4').value) {
+          document.getElementById('usd4').value = amount;
           document.getElementById("limitSell").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
           console.log("pussy")
