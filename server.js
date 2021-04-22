@@ -11,7 +11,7 @@ const api = require('binance');
 const fetch = require("node-fetch");
 
 
-console.log("poo");
+
 
 
 
