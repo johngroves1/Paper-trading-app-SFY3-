@@ -195,11 +195,13 @@
   </head>
 
   <body>
+    
+
+    <h2 id="livePrice">BTC|USD loading...</h2>
+    <h4 id="perChange">loading...</h4>
     <button onclick="chart4h()">4h</button>
     <button onclick="chart1m()">1m</button>
     <button onclick="chart1d()">1d</button>
-
-    <h2>BTC|USD</h2>
     <div id="tvchart"></div>
   </body>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
@@ -208,6 +210,7 @@
 
   <h3>USD: $<%- usd %></h3>
   <h3>BTC: <%- bitcoinWallet %></h3>
+  
   <p id="enoughWallet"></p>
 
 
@@ -338,12 +341,24 @@
     function limitBuy() {
       socket.once('KLINE_BTC_1d', (pl) => {
         log(pl.time);
+        log(document.getElementById('bitcoin3').value);
+        log();
+        var amount;
+        if (document.getElementById('usd').value > pl.close) {
+          amount = pl.close;
+          log("cheese")
+        } else {
+          amount = document.getElementById('usd').value;
+        }
 
         document.getElementById('time').value = pl.time;
         //document.getElementById("limitBuy").submit();
-        var enoughUSD = document.getElementById('bitcoin3').value * document.getElementById('usd').value;
+        
+        var enoughUSD = document.getElementById('bitcoin3').value * amount;
         log(enoughUSD);
+        log(amount);
         if (document.getElementById('wallet').value >= enoughUSD) {
+          document.getElementById('usd').value = amount;
           document.getElementById("limitBuy").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
           console.log("pussy")
@@ -387,10 +402,17 @@
         log(pl.time);
 
         document.getElementById('time4').value = pl.time;
-        //document.getElementById("limitBuy").submit();
-        //var enoughUSD = document.getElementById('bitcoin4').value * document.getElementById('usd4').value;
-        //log(enoughUSD);
+
+        var amount;
+        if (document.getElementById('usd4').value < pl.close) {
+          amount = pl.close;
+          log("cheese")
+        } else {
+          amount = document.getElementById('usd4').value;
+        }
+
         if (document.getElementById('btcWallet').value >= document.getElementById('bitcoin4').value) {
+          document.getElementById('usd4').value = amount;
           document.getElementById("limitSell").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
           console.log("pussy")
@@ -404,7 +426,9 @@
   </script>
   <br><br>
 
+  
   <table>
+    <h3>Active Orders for BTC</h3>
     <tr>
       <th>Trade ID</th>
       <th>Amount BTC</th>
@@ -414,15 +438,57 @@
     </tr>
     <% trades.forEach(function(item,index){ %>
     <tr>
-      <td> <%= item.tradeid %> </td>
+      <td id="<%= index %>"> <%= item.tradeid %> </td>
       <td> <%= item.amount %> </td>
       <td> <%= item.amountusd %> </td>
       <td> <%= item.amountusd / item.amount %> </td>
       <td> <%= item.type %> </td>
+      <td><button onclick="limitSmart('<%= item.tradeid %>', '<%= item.amount %>', '<%= item.type %>', '<%= item.amountusd %>')" type="button">Cancel</button></td>
+      
     </tr>
     <% }) %>
+    <div class="myDiv">
+      <form id="cancelTrade" action="/users/cancelTrade" method="POST">
+        <div>
+          <input type="hidden" id="tid" name="id" value="" required>
+        </div>
+        <div>
+          <input type="hidden" id="wid" name="walletid" value=<%- walletid %> required>
+        </div>
+        <div>
+          <input type="hidden" id="tamount" name="amount" value="" required>
+        </div>
+        <div>
+          <input type="hidden" id="ttype" name="type" value="" required>
+        </div>
+        <div>
+          <input type="hidden" id="tusd" name="usd" value="" required>
+        </div>
+        <a href="/users/dashboard"></a>
+      </form>
+    </div>
+
+    <script>
+      function limitSmart(id, amount, type, usd) {
+        document.getElementById('tid').value = id;
+        document.getElementById('tamount').value = amount;
+        document.getElementById('ttype').value = type;
+        document.getElementById('tusd').value = usd;
+        console.log(id + amount + type + usd);
+        document.getElementById("cancelTrade").submit();
+
+      }
+      
+    </script>
     
   </table>
+
+<!--   <script>
+    function limitSmart() {
+      document.getElementById('enoughWallet').innerHTML = document.getElementById('cool').innerHTML;
+    }
+    
+  </script> -->
 
 
 

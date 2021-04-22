@@ -89,14 +89,14 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                         });
                         console.log("result.rows[0].time");
                         // console.log();
-                        
+
                         //console.log(parseFloat(t.amountusd));
 
                         cdata.forEach(e => {
-                            result.rows.forEach(t =>{
+                            result.rows.forEach(t => {
                                 var filled = false;
                                 //log(e.high);
-                                if (e.low <= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitBuy") {
+                                if (e.low <= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitBuy" && t.coin =="btc") {
                                     pool.query(
                                         `UPDATE wallet SET bitcoin = bitcoin + $1
                                         WHERE id =$2`, [parseFloat(t.amount), req.user.id], (err, data) => {
@@ -120,7 +120,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                                     console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
                                     console.log(t.amount);
                                     filled = true;
-                                } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount)  && e.time >= t.time && filled == false && t.type == "limitSell") {
+                                } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell" && t.coin =="btc") {
                                     console.log(parseFloat(t.amountusd) + "tits" + e.high)
                                     pool.query(
                                         `UPDATE wallet SET usd = usd + $1
@@ -150,7 +150,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                         });
                     })
                     .catch(err => console.log(err))
-               // amountTrade = result.rows[0].amount;
+                // amountTrade = result.rows[0].amount;
             }
 
 
@@ -504,6 +504,60 @@ app.post('/users/btcLimitSell', (req, res) => {
 
 
     })
+    res.redirect('/users/chart');
+
+})
+
+app.post('/users/cancelTrade', (req, res) => {
+    //let {bitcoin} = req.body;
+    console.log(req.body.id);
+    console.log(req.body.walletid);
+    console.log(req.body.amount);
+    console.log(req.body.type);
+    console.log(req.body.usd);
+    //console.log(req.body.bitcoin1);
+    //console.log(req.body.coin);
+    //res.redirect('/users/chart');
+
+    pool.query(
+        `DELETE FROM trades WHERE tradeid = $1`, [req.body.id], (err, data) => {
+            if (err) {
+                throw err
+            }
+            //console.log(data.rows);
+
+        }
+    )
+    if (req.body.type == "limitBuy") {
+        pool.query(
+            `UPDATE wallet SET usd = usd + $2
+                WHERE walletid =$1`, [req.body.walletid, req.body.usd], (err, results) => {
+            if (err) {
+                throw err
+            }
+            console.log("cheeseyyy");
+            var coin = `bitcoin`;
+
+
+
+        })
+
+    } else {
+        pool.query(
+            `UPDATE wallet SET bitcoin = bitcoin + $2
+                WHERE walletid =$1`, [req.body.walletid, req.body.amount], (err, results) => {
+            if (err) {
+                throw err
+            }
+            console.log("cheese");
+            //var coin = `bitcoin`;
+
+
+
+        })
+
+    }
+
     res.redirect('/users/chart');
 
 })
