@@ -159,7 +159,6 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                         });
                     })
                     .catch(err => console.log(err))
-                // amountTrade = result.rows[0].amount;
             }
             
             console.log(checkFilled + "cheese");
@@ -169,33 +168,10 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
                 eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, usd: Math.round(results.rows[0].usd * 100) / 100, walletid: results.rows[0].walletid, bitcoinWallet: results.rows[0].bitcoin, trades: result.rows, checkTrade: checkFilled
             });
-            //req.flash('success_msg', "You are now registered. Please log in");
+           
 
         }
         )
-
-
-        /* fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=50000`)
-            .then(result => result.json())
-            .then(data => {
-                const cdata = data.map(d => {
-                    return { time: d[0] / 1000, open: parseFloat(d[1]), high: parseFloat(d[2]), low: parseFloat(d[3]), close: parseFloat(d[4]) }
-                });
-                console.log("penis");
-                cdata.forEach(e => {
-                    //log(e.high);
-                    if (e.high > 50000) {
-                        // log(e.time);
-                        //log(e.high);
-                        console.log("ORDER SUCCESFUL")
-                    }
-    
-                });
-            })
-            .catch(err => log(err)) */
-
-
-
     }
     );
 });

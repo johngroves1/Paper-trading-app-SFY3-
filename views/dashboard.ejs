@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <script src="http://127.0.0.1:3000/socket.io/socket.io.js"></script>
     <style>
       body {margin:0;font-family:Arial}
       
@@ -153,17 +154,145 @@
         }
         
         </script>
-  <div style=" margin-left: auto;" style="margin-right: auto;">  
-    <div id="dashboard" style="width: 20em;" >
-      <p></p>
-      <h1>Buy and sell cryptocurrency</h1>
-      <p>Learn to buy and sell cryptocurrency at the comfort of no cash loss</p>
-      <p>Feel free to learn and excercise your trading skills with market orders and limit orders</p>
-      <p>Click on your name in the navbar to view your asset overview</p>
-      <p>Click on the Coins list to select your coin and begin trading</p>
-    </div>
-  </div>   
+<div style="text-align: center;">
+<table style="width: 100%;">
+  <tbody>
+    <tr style="color: rgb(1, 151, 151);">
+      <td>&nbsp;</td>
+      <td>&nbsp;<h3 style="font-size: 25px;">Start trading today</h3></td>
+      <td>&nbsp;</td>
+      </tr>
+  <tr  style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;" >
+  <td>&nbsp;</td>
+  <td>&nbsp;<h1 style="font-size: 50px;">Buy and sell cryptocurrency</h1></td>
+  <td>&nbsp;</td>
+  </tr>
+  <tr>
+  <td>&nbsp;</td>
+  <td style="font-size: 17px;">&nbsp;<p>Learn to buy and sell cryptocurrency at the comfort of no cash loss!</p>
+    <p>Feel free to learn and excercise your trading skills with market orders and limit orders</p>
+    <p>Click on your name in the navigation bar to view your asset overview</p>
+    <p>Click on the Coins list to select your coin and begin trading</p></td>
+  <td>&nbsp;</td>
+  </tr>
 
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp; <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;text-align: center;width: 100px;}
+        .tg td{border-color:white;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:20px;
+          overflow:hidden;padding:10px 50px;word-break:normal;}
+        .tg th{border-color:white;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-0lax{text-align:center;vertical-align:top}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="tg-0lax">Coin</th>
+            <th class="tg-0lax">Last Price</th>
+            <th class="tg-0lax">24hr Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            
+            <td class="tg-0lax"><a href="/users/chart"><img alt="Poster" src="/users/btcI" width="40px" height="40px"></a></td>
+            <td class="tg-0lax" id=btcPrice>Loading...</td>
+            <td class="tg-0lax"id=btcPer>Loading...</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="tg-0lax"><img alt="Poster" src="/users/ethI" width="40px" height="40px"></td>
+            <td class="tg-0lax"></td>
+            <td class="tg-0lax"></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="tg-0lax"><img alt="Poster" src="/users/xrpI" width="40px" height="40px"></td>
+            <td class="tg-0lax"></td>
+            <td class="tg-0lax"></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="tg-0lax"><img alt="Poster" src="/users/bnbI" width="40px" height="40px"></td>
+            <td class="tg-0lax"></td>
+            <td class="tg-0lax"></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="tg-0lax"><img alt="Poster" src="/users/adaI" width="40px" height="40px"></td>
+            <td class="tg-0lax"></td>
+            <td class="tg-0lax"></td>
+          </tr>
+        </tbody>
+        </table></td>
+      <td>&nbsp;</td>
+      
+      </tr>
+  </tbody>
+  </table>
+</div>
+
+
+<script>
+  var socket = io.connect('http://127.0.0.1:3000/');
+
+
+  socket.on('KLINE_BTC_1m', (pl) => {
+
+    document.getElementById('btcPrice').innerHTML = pl.close;
+  }
+  );
+  socket.on('KLINE_CHANGE', (pl) => {
+
+document.getElementById('btcPer').innerHTML = pl.change + "%";
+}
+);
+</script>
  
     
 
