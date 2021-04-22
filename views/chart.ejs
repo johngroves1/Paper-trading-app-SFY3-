@@ -195,11 +195,13 @@
   </head>
 
   <body>
+    
+
+    <h2 id="livePrice">BTC|USD</h2>
+    <h4 id="perChange">loading...</h4>
     <button onclick="chart4h()">4h</button>
     <button onclick="chart1m()">1m</button>
     <button onclick="chart1d()">1d</button>
-
-    <h2>BTC|USD</h2>
     <div id="tvchart"></div>
   </body>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
@@ -208,6 +210,7 @@
 
   <h3>USD: $<%- usd %></h3>
   <h3>BTC: <%- bitcoinWallet %></h3>
+  
   <p id="enoughWallet"></p>
 
 
@@ -404,7 +407,9 @@
   </script>
   <br><br>
 
+  
   <table>
+    <h3>Active Orders for BTC</h3>
     <tr>
       <th>Trade ID</th>
       <th>Amount BTC</th>

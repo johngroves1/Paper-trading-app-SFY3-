@@ -65,7 +65,6 @@ var chartTime = "KLINE_BTC_1d";
 
 
 socket1.on(chartTime, (pl) => {
-  log(pl.open + "Not Yurt");
   candleSeries.update(pl);
   //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.open;
 
@@ -73,21 +72,17 @@ socket1.on(chartTime, (pl) => {
 
 });
 
-/* /* socket.on('KLINE_BTC_1m', (pl) => {
-  log(pl.open + "Yurt");
+ socket.on('KLINE_CHANGE', (pl) => {
+  log(pl.change + "Yurt");
   //candleSeries.update(pl);
-  document.forms[1].coin.value = pl.close;
+  document.getElementById('perChange').innerHTML = "24hr Change: " + pl.change +"%" + " | 24hr High: " + Math.round(pl.high24h * 100) / 100 +" USD" + " | 24hr Low: " + Math.round(pl.low24h * 100) / 100 +" USD";
+  document.getElementById('livePrice').innerHTML = "BTC|USD " + Math.round(pl.price * 100) / 100;
 
 
 
 }); 
 
-socket.on('KLINE_BTC_4h', (pl) => {
-  log(pl.open + "Yurty McYurt");
-  //candleSeries.update(pl);
-  //document.getElementById('symbolPrice').innerHTML = "BTC|USDT  " + pl.close;
 
-}); */
 
 
 function limitOrderB() {

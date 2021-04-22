@@ -32,6 +32,9 @@ const btc1m = binanceBTC1d.onKline('BTCUSDT', '1m', (data) => {
 const btc4h = binanceBTC1d.onKline('BTCUSDT', '4h', (data) => {
     io.sockets.emit('KLINE_BTC_4h',{time:Math.round(data.kline.startTime/1000),open:parseFloat(data.kline.open),high:parseFloat(data.kline.high),low:parseFloat(data.kline.low),close:parseFloat(data.kline.close)});
 });
+const btcChange = binanceBTC1d.onTicker('BTCUSDT', (data) => {
+    io.sockets.emit('KLINE_CHANGE',{change: data.priceChangePercent, high24h: data.high, low24h: data.low, price: data.currentClose});
+});
 
 /*const eth1d = binanceBTC1d.onKline('ETHUSDT', '1d', (data) => {
     io.sockets.emit('KLINE11',{time:Math.round(data.kline.startTime/1000),open:parseFloat(data.kline.open),high:parseFloat(data.kline.high),low:parseFloat(data.kline.low),close:parseFloat(data.kline.close)});

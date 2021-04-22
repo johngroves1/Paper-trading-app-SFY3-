@@ -96,7 +96,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                             result.rows.forEach(t => {
                                 var filled = false;
                                 //log(e.high);
-                                if (e.low <= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitBuy") {
+                                if (e.low <= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitBuy" && t.coin =="btc") {
                                     pool.query(
                                         `UPDATE wallet SET bitcoin = bitcoin + $1
                                         WHERE id =$2`, [parseFloat(t.amount), req.user.id], (err, data) => {
@@ -120,7 +120,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                                     console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
                                     console.log(t.amount);
                                     filled = true;
-                                } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell") {
+                                } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell" && t.coin =="btc") {
                                     console.log(parseFloat(t.amountusd) + "tits" + e.high)
                                     pool.query(
                                         `UPDATE wallet SET usd = usd + $1
