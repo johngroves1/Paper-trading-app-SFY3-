@@ -257,7 +257,10 @@
       </tr>
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/bnbI" width="40px" height="40px"></td>
-
+        <td id="amountBNB" class="tg-0lax"><%= bnb %></td>
+        <td class="tg-0lax"><%= amount %></td>
+        <td id="amountUSDbnb" class="tg-0lax">loading...</td>
+        <td id="bnbPrice" class="tg-0lax">loading...</td>
 
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
       <tr>
@@ -312,6 +315,15 @@
       console.log("amountUSDxrp" + amountUSD);
       document.getElementById('amountUSDxrp').innerHTML = Math.round(amountUSD * 100) / 100 + " USD";
       document.getElementById('xrpPrice').innerHTML = pl.close + " USD";
+
+    });
+
+    socket.on('KLINE_BNB_1m', (pl) => {
+
+      var amountUSD = document.getElementById('amountBNB').innerHTML * pl.close;
+      console.log("amountUSDbnb" + amountUSD);
+      document.getElementById('amountUSDbnb').innerHTML = Math.round(amountUSD * 100) / 100 + " USD";
+      document.getElementById('bnbPrice').innerHTML = pl.close + " USD";
 
     });
 

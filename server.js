@@ -591,7 +591,7 @@ app.get('/users/assets', checkNotAuthenticated, (req, res) => {
             }
             res.render("assets", {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
-                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, amount: amountTrade
+                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, bnb: results.rows[0].bnb, amount: amountTrade
             });
         }
         )
