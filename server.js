@@ -57,7 +57,6 @@ app.get('/users/btc', checkNotAuthenticated, (req, res) => {
     pool.query(
         `SELECT * FROM wallet
         WHERE id = $1`, [req.user.id], (err, results) => {
-        console.log(results.rows);
         pool.query(
             `SELECT * FROM trades
             WHERE walletid = $1 AND coin = 'btc'`, [results.rows[0].walletid], (err, result) => {
@@ -75,7 +74,6 @@ app.get('/users/btc', checkNotAuthenticated, (req, res) => {
                         cdata.forEach(e => {
                             result.rows.forEach(t => {
                                 var filled = false;
-                                //log(e.high);
                                 if (e.low <= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitBuy" && t.coin == "btc") {
                                     checkFilled = "filled";
                                     pool.query(
@@ -102,7 +100,6 @@ app.get('/users/btc', checkNotAuthenticated, (req, res) => {
                                     console.log(t.amount);
                                     filled = true;
                                 } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell" && t.coin == "btc") {
-                                    console.log(parseFloat(t.amountusd) + "tits" + e.high)
                                     pool.query(
                                         `UPDATE wallet SET usd = usd + $1
                                         WHERE id =$2`, [parseFloat(t.amountusd), req.user.id], (err, data) => {
@@ -117,14 +114,9 @@ app.get('/users/btc', checkNotAuthenticated, (req, res) => {
                                         if (err) {
                                             throw err
                                         }
-                                        console.log(data.rows);
-                                        console.log("yurt");
                                         checkFilled = "filled";
-                                        console.log(checkFilled);
                                     }
                                     )
-                                    console.log("ORDER Sewll SUCCESFUL")
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
                                     filled = true;
                                 }
                             });
@@ -133,7 +125,6 @@ app.get('/users/btc', checkNotAuthenticated, (req, res) => {
                     })
                     .catch(err => console.log(err))
             }
-            console.log(checkFilled + "cheese");
             res.render("btc", {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
                 eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, usd: Math.round(results.rows[0].usd * 100) / 100, walletid: results.rows[0].walletid, bitcoinWallet: results.rows[0].bitcoin, trades: result.rows, checkTrade: checkFilled
@@ -156,7 +147,6 @@ app.get('/users/ethereum', checkNotAuthenticated, (req, res) => {
             if (err) {
                 throw err
             }
-
             if (result.rows.length > 0) {
                 fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1d&limit=50000`)
                     .then(result => result.json())
@@ -168,7 +158,6 @@ app.get('/users/ethereum', checkNotAuthenticated, (req, res) => {
                         cdata.forEach(e => {
                             result.rows.forEach(t => {
                                 var filled = false;
-                                //log(e.high);
                                 if (e.low <= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitBuy" && t.coin == "eth") {
                                     checkFilled = "filled";
                                     pool.query(
@@ -185,17 +174,10 @@ app.get('/users/ethereum', checkNotAuthenticated, (req, res) => {
                                         if (err) {
                                             throw err
                                         }
-                                        console.log(data.rows);
-                                        console.log("yurt");
-                                        console.log(checkFilled);
                                     }
                                     )
-                                    console.log("ORDER SUCCESFUL")
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
-                                    console.log(t.amount);
                                     filled = true;
                                 } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell" && t.coin == "eth") {
-                                    console.log(parseFloat(t.amountusd) + "tits" + e.high)
                                     pool.query(
                                         `UPDATE wallet SET usd = usd + $1
                                         WHERE id =$2`, [parseFloat(t.amountusd), req.user.id], (err, data) => {
@@ -210,14 +192,9 @@ app.get('/users/ethereum', checkNotAuthenticated, (req, res) => {
                                         if (err) {
                                             throw err
                                         }
-                                        console.log(data.rows);
-                                        console.log("yurt");
                                         checkFilled = "filled";
-                                        console.log(checkFilled);
                                     }
                                     )
-                                    console.log("ORDER Sewll SUCCESFUL")
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
                                     filled = true;
                                 }
                             });
@@ -226,8 +203,6 @@ app.get('/users/ethereum', checkNotAuthenticated, (req, res) => {
                     })
                     .catch(err => console.log(err))
             }
-            console.log(checkFilled + "cheese");
-
             res.render("ethereum", {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
                 eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, usd: Math.round(results.rows[0].usd * 100) / 100, walletid: results.rows[0].walletid, ethereumWallet: results.rows[0].ethereum, trades: result.rows, checkTrade: checkFilled
@@ -260,7 +235,6 @@ app.get('/users/xrp', checkNotAuthenticated, (req, res) => {
                         cdata.forEach(e => {
                             result.rows.forEach(t => {
                                 var filled = false;
-                                //log(e.high);
                                 if (e.low <= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitBuy" && t.coin == "xrp") {
                                     checkFilled = "filled";
                                     pool.query(
@@ -277,14 +251,8 @@ app.get('/users/xrp', checkNotAuthenticated, (req, res) => {
                                         if (err) {
                                             throw err
                                         }
-                                        console.log(data.rows);
-                                        console.log("yurt");
-                                        console.log(checkFilled);
                                     }
                                     )
-                                    console.log("ORDER SUCCESFUL")
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
-                                    console.log(t.amount);
                                     filled = true;
                                 } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell" && t.coin == "xrp") {
                                     pool.query(
@@ -301,11 +269,8 @@ app.get('/users/xrp', checkNotAuthenticated, (req, res) => {
                                         if (err) {
                                             throw err
                                         }
-                                        console.log(data.rows);
-                                        console.log(checkFilled);
                                     }
                                     )
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
                                     filled = true;
                                 }
                             });
@@ -314,7 +279,6 @@ app.get('/users/xrp', checkNotAuthenticated, (req, res) => {
                     })
                     .catch(err => console.log(err))
             }
-            console.log(checkFilled + "cheese");
 
             res.render("xrp", {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
@@ -331,7 +295,6 @@ app.get('/users/bnb', checkNotAuthenticated, (req, res) => {
     pool.query(
         `SELECT * FROM wallet
         WHERE id = $1`, [req.user.id], (err, results) => {
-        console.log(results.rows);
         pool.query(
             `SELECT * FROM trades
             WHERE walletid = $1 AND coin = 'bnb'`, [results.rows[0].walletid], (err, result) => {
@@ -366,17 +329,10 @@ app.get('/users/bnb', checkNotAuthenticated, (req, res) => {
                                         if (err) {
                                             throw err
                                         }
-                                        console.log(data.rows);
-                                        console.log("yurt");
-                                        console.log(checkFilled);
                                     }
                                     )
-                                    console.log("ORDER SUCCESFUL")
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
-                                    console.log(t.amount);
                                     filled = true;
                                 } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell" && t.coin == "bnb") {
-                                    console.log(parseFloat(t.amountusd) + "tits" + e.high)
                                     pool.query(
                                         `UPDATE wallet SET usd = usd + $1
                                         WHERE id =$2`, [parseFloat(t.amountusd), req.user.id], (err, data) => {
@@ -397,8 +353,6 @@ app.get('/users/bnb', checkNotAuthenticated, (req, res) => {
                                         console.log(checkFilled);
                                     }
                                     )
-                                    console.log("ORDER Sewll SUCCESFUL")
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
                                     filled = true;
                                 }
                             });
@@ -407,8 +361,6 @@ app.get('/users/bnb', checkNotAuthenticated, (req, res) => {
                     })
                     .catch(err => console.log(err))
             }
-            console.log(checkFilled + "cheese");
-
             res.render("bnb", {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
                 eth: results.rows[0].eth, xrp: results.rows[0].xrp, usd: Math.round(results.rows[0].usd * 100) / 100, walletid: results.rows[0].walletid, bnbWallet: results.rows[0].bnb, trades: result.rows, checkTrade: checkFilled
@@ -459,15 +411,8 @@ app.get('/users/ada', checkNotAuthenticated, (req, res) => {
                                         if (err) {
                                             throw err
                                         }
-                                        console.log(data.rows);
-                                        console.log("yurt");
-
-                                        console.log(checkFilled);
                                     }
                                     )
-                                    console.log("ORDER SUCCESFUL")
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
-                                    console.log(t.amount);
                                     filled = true;
                                 } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell" && t.coin == "ada") {
                                     console.log(parseFloat(t.amountusd) + "tits" + e.high)
@@ -485,14 +430,9 @@ app.get('/users/ada', checkNotAuthenticated, (req, res) => {
                                         if (err) {
                                             throw err
                                         }
-                                        console.log(data.rows);
-                                        console.log("yurt");
                                         checkFilled = "filled";
-                                        console.log(checkFilled);
                                     }
                                     )
-                                    console.log("ORDER Sewll SUCCESFUL")
-                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
                                     filled = true;
                                 }
                             });
@@ -748,6 +688,11 @@ app.post('/users/login',
     })
 );
 
+//Post for market orders
+//Queries database to read in wallet data
+//queries database to either add or subract from the coins wallet depending if a market buy or market sell order is submitted
+//If no wallet exists it creates a new wallet and inserts the value into the database 
+
 app.post('/users/btc', (req, res) => {
     console.log(req.body.id);
     console.log(req.body.bitcoin);
@@ -790,7 +735,6 @@ app.post('/users/btc', (req, res) => {
                     if (err) {
                         throw err
                     }
-                    console.log(results.rows);
                 }
             )
         }
@@ -850,12 +794,7 @@ app.post('/users/ethMarketBuy', (req, res) => {
 })
 
 app.post('/users/xrpMarketBuy', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.xrp);
-    console.log(req.body.coin);
     var amount = req.body.xrp * req.body.coin;
-    console.log(amount);
-
     pool.query(
         `SELECT * FROM WALLET
         WHERE id = $1`, [req.body.id], (err, results) => {
@@ -902,12 +841,7 @@ app.post('/users/xrpMarketBuy', (req, res) => {
 })
 
 app.post('/users/bnbMarketBuy', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.bnb);
-    console.log(req.body.coin);
     var amount = req.body.bnb * req.body.coin;
-    console.log(amount);
-
     pool.query(
         `SELECT * FROM WALLET
         WHERE id = $1`, [req.body.id], (err, results) => {
@@ -917,7 +851,6 @@ app.post('/users/bnbMarketBuy', (req, res) => {
         var coin = `bnb`;
 
         if (results.rows.length > 0) {
-            console.log(req.body.coin);
             if (req.body.buy == 1) {
                 pool.query(
                     `UPDATE wallet SET bnb = bnb + $1, usd = usd - $3
@@ -944,7 +877,6 @@ app.post('/users/bnbMarketBuy', (req, res) => {
                     if (err) {
                         throw err
                     }
-                    console.log(results.rows);
                 }
             )
         }
@@ -953,12 +885,7 @@ app.post('/users/bnbMarketBuy', (req, res) => {
 })
 
 app.post('/users/adaMarketBuy', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.ada);
-    console.log(req.body.coin);
     var amount = req.body.ada * req.body.coin;
-    console.log(amount);
-
     pool.query(
         `SELECT * FROM WALLET
         WHERE id = $1`, [req.body.id], (err, results) => {
@@ -1004,13 +931,12 @@ app.post('/users/adaMarketBuy', (req, res) => {
     res.redirect('/users/ada');
 })
 
-app.post('/users/btcLimitBuy', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.bitcoin);
-    console.log(req.body.coin);
-    var amount = req.body.bitcoin * req.body.usd;
-    console.log(amount);
+//Post requests for limit buy and limit sell orders to insert trades into the trades table and update the wallets according to which coin the order is for
+//If a buy order is executed it inserts the trade and takes away from USD in wallet
+//If a sell order is executed it inserts the trade and takes away from USD in wallet
 
+app.post('/users/btcLimitBuy', (req, res) => {
+    var amount = req.body.bitcoin * req.body.usd;
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bitcoin, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1024,20 +950,12 @@ app.post('/users/btcLimitBuy', (req, res) => {
         if (err) {
             throw err
         }
-        console.log("cheese");
-        var coin = `bitcoin`;
     })
-    res.redirect('/users/chart');
+    res.redirect('/users/btc');
 })
 
 app.post('/users/ethLimitBuy', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.ethereum);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.ethereum * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.ethereum, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1055,15 +973,7 @@ app.post('/users/ethLimitBuy', (req, res) => {
 })
 
 app.post('/users/btcLimitSell', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.bitcoin);
-    console.log(req.body.coin);
-    console.log(req.body.type);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.bitcoin * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bitcoin, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1077,22 +987,12 @@ app.post('/users/btcLimitSell', (req, res) => {
         if (err) {
             throw err
         }
-        console.log("cheese");
-        var coin = `bitcoin`;
     })
-    res.redirect('/users/chart');
+    res.redirect('/users/btc');
 })
 
 app.post('/users/ethLimitSell', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.ethereum);
-    console.log(req.body.coin);
-    console.log(req.body.type);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.ethereum * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.ethereum, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1110,13 +1010,7 @@ app.post('/users/ethLimitSell', (req, res) => {
 })
 
 app.post('/users/xrpLimitBuy', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.xrp);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.xrp * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.xrp, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1134,15 +1028,7 @@ app.post('/users/xrpLimitBuy', (req, res) => {
 })
 
 app.post('/users/xrpLimitSell', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.xrp);
-    console.log(req.body.coin);
-    console.log(req.body.type);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.xrp * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.xrp, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1160,13 +1046,7 @@ app.post('/users/xrpLimitSell', (req, res) => {
 })
 
 app.post('/users/bnbLimitBuy', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.bnb);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.bnb * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bnb, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1184,15 +1064,7 @@ app.post('/users/bnbLimitBuy', (req, res) => {
 })
 
 app.post('/users/bnbLimitSell', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.bnb);
-    console.log(req.body.coin);
-    console.log(req.body.type);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.bnb * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.bnb, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1210,13 +1082,7 @@ app.post('/users/bnbLimitSell', (req, res) => {
 })
 
 app.post('/users/adaLimitBuy', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.ada);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.ada * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.ada, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1234,15 +1100,7 @@ app.post('/users/adaLimitBuy', (req, res) => {
 })
 
 app.post('/users/adaLimitSell', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.ada);
-    console.log(req.body.coin);
-    console.log(req.body.type);
-    console.log(req.body.time);
-    console.log(req.body.coin);
     var amount = req.body.ada * req.body.usd;
-    console.log(amount);
-
     pool.query(
         `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.ada, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
             if (err) {
@@ -1259,13 +1117,9 @@ app.post('/users/adaLimitSell', (req, res) => {
     res.redirect('/users/ada');
 })
 
+//Post requests for queries to cancel remove trade from database and update wallets amounts
+//All below is the same queries for the different coins
 app.post('/users/cancelTrade', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.walletid);
-    console.log(req.body.amount);
-    console.log(req.body.type);
-    console.log(req.body.usd);
-
     pool.query(
         `DELETE FROM trades WHERE tradeid = $1`, [req.body.id], (err, data) => {
             if (err) {
@@ -1280,8 +1134,6 @@ app.post('/users/cancelTrade', (req, res) => {
             if (err) {
                 throw err
             }
-            console.log("cheeseyyy");
-            var coin = `bitcoin`;
         })
 
     } else {
@@ -1291,19 +1143,12 @@ app.post('/users/cancelTrade', (req, res) => {
             if (err) {
                 throw err
             }
-            console.log("cheese");
         })
     }
     res.redirect('/users/btc');
 })
 
 app.post('/users/cancelTradeETH', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.walletid);
-    console.log(req.body.amount);
-    console.log(req.body.type);
-    console.log(req.body.usd);
-
     pool.query(
         `DELETE FROM trades WHERE tradeid = $1`, [req.body.id], (err, data) => {
             if (err) {
@@ -1333,12 +1178,6 @@ app.post('/users/cancelTradeETH', (req, res) => {
 })
 
 app.post('/users/cancelTradeXRP', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.walletid);
-    console.log(req.body.amount);
-    console.log(req.body.type);
-    console.log(req.body.usd);
-
     pool.query(
         `DELETE FROM trades WHERE tradeid = $1`, [req.body.id], (err, data) => {
             if (err) {
@@ -1368,12 +1207,6 @@ app.post('/users/cancelTradeXRP', (req, res) => {
 })
 
 app.post('/users/cancelTradeBNB', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.walletid);
-    console.log(req.body.amount);
-    console.log(req.body.type);
-    console.log(req.body.usd);
-
     pool.query(
         `DELETE FROM trades WHERE tradeid = $1`, [req.body.id], (err, data) => {
             if (err) {
@@ -1403,11 +1236,6 @@ app.post('/users/cancelTradeBNB', (req, res) => {
 })
 
 app.post('/users/cancelTradeADA', (req, res) => {
-    console.log(req.body.id);
-    console.log(req.body.walletid);
-    console.log(req.body.amount);
-    console.log(req.body.type);
-    console.log(req.body.usd);
 
     pool.query(
         `DELETE FROM trades WHERE tradeid = $1`, [req.body.id], (err, data) => {
