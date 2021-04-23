@@ -167,8 +167,8 @@
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <a href="/users/chart">ethereum</a>
-        <a href="#">Ethereum</a>
+        <a href="/users/chart">xrp</a>
+        <a href="#">xrp</a>
         <a href="#">XRP</a>
       </div>
     </div>
@@ -206,7 +206,7 @@
   <body>
 
 
-    <h2 id="livePrice">ETH|USD loading...</h2>
+    <h2 id="livePrice">XRP|USD loading...</h2>
     <h4 id="perChange">loading...</h4>
     <button onclick="chart4h()">4h</button>
     <button onclick="chart1m()">1m</button>
@@ -215,10 +215,10 @@
   </body>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-  <script src="/users/ethJS"></script>
+  <script src="/users/xrpJS"></script>
 
   <h3>USD: $<%- usd %></h3>
-  <h3>ETH: <%- ethereumWallet %></h3>
+  <h3>XRP: <%- xrpWallet %></h3>
 
   <p id="enoughWallet"></p>
 
@@ -229,7 +229,7 @@
 
   <div class="myDiv">
     <h3>Market Buy Order</h3>
-    <form id="marketBuy" action="/users/ethMarketBuy" method="POST">
+    <form id="marketBuy" action="/users/xrpMarketBuy" method="POST">
       <div>
         <input type="hidden" id="id" name="id" value=<%- test %> required>
       </div>
@@ -243,7 +243,7 @@
         <input type="hidden" id="coin" name="coin" required>
       </div>
       <div>
-        <input type="number" id="ethereum" name="ethereum" placeholder="ethereum" required>
+        <input type="number" id="xrp" name="xrp" placeholder="xrp" required>
       </div>
 
       <a href="/users/dashboard"></a>
@@ -252,21 +252,19 @@
   </div>
   <script>
     function marketBuy() {
-      socket.once('KLINE_ETH_1m', (pl) => {
+      socket.once('KLINE_XRP_1m', (pl) => {
         log(pl.open);
         //candleSeries.update(pl);
         //document.forms[1].coin.value = pl.close;
-        var amountBuyETH = document.getElementById('ethereum').value;
-        var amountBuyUSD = pl.close * amountBuyETH;
+        var amountBuyXRP = document.getElementById('xrp').value;
+        var amountBuyUSD = pl.close * amountBuyXRP;
         document.getElementById('coin').value = amountBuyUSD;
         //document.getElementById("marketBuy").submit();
 
         if (document.getElementById('wallet').value >= amountBuyUSD) {
           document.getElementById("marketBuy").submit();
-          console.log("pussy")
         } else {
           document.getElementById('enoughWallet').innerHTML = "* Insufficient Funds To Complete Market Buy Order";
-          console.log(" not pussy")
         }
 
       });
@@ -274,7 +272,7 @@
   </script>
   <div class="myDiv">
     <h3>Market Sell Order</h3>
-    <form id="marketSell" action="/users/ethMarketBuy" method="POST">
+    <form id="marketSell" action="/users/xrpMarketBuy" method="POST">
       <div>
         <input type="hidden" id="id" name="id" value=<%- test %> required>
       </div>
@@ -282,13 +280,13 @@
         <input type="hidden" id="coin1" name="coin" value="" required>
       </div>
       <div>
-        <input type="hidden" id="ETHWallet" name="wallet" value=<%- ethereumWallet %> required>
+        <input type="hidden" id="XRPWallet" name="wallet" value=<%- xrpWallet %> required>
       </div>
       <div>
         <input type="hidden" id="buy" name="buy" value="0" required>
       </div>
       <div>
-        <input type="number" id="ethereum1" name="ethereum" placeholder="ethereum" required>
+        <input type="number" id="xrp1" name="xrp" placeholder="xrp" required>
       </div>
       <a href="/users/dashboard"></a>
     </form>
@@ -296,18 +294,18 @@
   </div>
   <script>
     function marketSell() {
-      socket.once('KLINE_ETH_1m', (pl) => {
+      socket.once('KLINE_XRP_1m', (pl) => {
         log(pl.open);
         //candleSeries.update(pl);
         //document.forms[1].coin.value = pl.close;
-        var amountSellETH = document.getElementById('ethereum1').value;
-        log(amountSellETH);
-        var amountSellUSD = pl.close * amountSellETH;
+        var amountSellXRP = document.getElementById('xrp1').value;
+        log(amountSellXRP);
+        var amountSellUSD = pl.close * amountSellXRP;
         log(amountSellUSD);
         document.getElementById('coin1').value = amountSellUSD;
 
         //document.getElementById("marketSell").submit();
-        if (document.getElementById('ETHWallet').value >= document.getElementById('ethereum1').value) {
+        if (document.getElementById('XRPWallet').value >= document.getElementById('xrp1').value) {
           document.getElementById("marketSell").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
 
@@ -322,12 +320,12 @@
 
   <div class="myDiv">
     <h3>Limit Buy Order</h3>
-    <form id="limitBuy" action="/users/ethLimitBuy" method="POST">
+    <form id="limitBuy" action="/users/xrpLimitBuy" method="POST">
       <div>
         <input type="hidden" id="id" name="id" value=<%- walletid %> required>
       </div>
       <div>
-        <input type="hidden" id="coin" name="coin" value="eth" required>
+        <input type="hidden" id="coin" name="coin" value="xrp" required>
       </div>
       <div>
         <input type="hidden" id="type" name="type" value="limitBuy" required>
@@ -336,7 +334,7 @@
         <input type="hidden" id="time" name="time" value="" required>
       </div>
       <div>
-        <input type="number" id="ethereum3" name="ethereum" placeholder="Amount ETH" required>
+        <input type="number" id="xrp3" name="xrp" placeholder="Amount XRP" required>
       </div>
       <div>
         <input type="number" id="usd" name="usd" placeholder="Amount USD" required>
@@ -348,14 +346,13 @@
 
   <script>
     function limitBuy() {
-      socket.once('KLINE_ETH_1d', (pl) => {
+      socket.once('KLINE_XRP_1d', (pl) => {
         log(pl.time);
-        log(document.getElementById('ethereum3').value);
-        log();
+        log(document.getElementById('xrp3').value);
         var amount;
         if (document.getElementById('usd').value > pl.close) {
           amount = pl.close;
-          log("cheese")
+
         } else {
           amount = document.getElementById('usd').value;
         }
@@ -363,17 +360,17 @@
         document.getElementById('time').value = pl.time;
         //document.getElementById("limitBuy").submit();
 
-        var enoughUSD = document.getElementById('ethereum3').value * amount;
+        var enoughUSD = document.getElementById('xrp3').value * amount;
         log(enoughUSD);
         log(amount);
         if (document.getElementById('wallet').value >= enoughUSD) {
           document.getElementById('usd').value = amount;
           document.getElementById("limitBuy").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
-          console.log("pussy")
+
         } else {
           document.getElementById('enoughWallet').innerHTML = "Insufficient USD To Complete Limit Buy Order";
-          console.log(" not pussy")
+
         }
 
       });
@@ -382,12 +379,12 @@
 
   <div class="myDiv">
     <h3>Limit Sell Order</h3>
-    <form id="limitSell" action="/users/ethLimitSell" method="POST">
+    <form id="limitSell" action="/users/xrpLimitSell" method="POST">
       <div>
         <input type="hidden" id="id" name="id" value=<%- walletid %> required>
       </div>
       <div>
-        <input type="hidden" id="coin" name="coin" value="eth" required>
+        <input type="hidden" id="coin" name="coin" value="xrp" required>
       </div>
       <div>
         <input type="hidden" id="type" name="type" value="limitSell" required>
@@ -396,7 +393,7 @@
         <input type="hidden" id="time4" name="time" value="" required>
       </div>
       <div>
-        <input type="number" id="ethereum4" name="ethereum" placeholder="Amount ETH" required>
+        <input type="number" id="xrp4" name="xrp" placeholder="Amount XRP" required>
       </div>
       <div>
         <input type="number" id="usd4" name="usd" placeholder="Amount USD" required>
@@ -407,7 +404,7 @@
   </div>
   <script>
     function limitSell() {
-      socket.once('KLINE_ETH_1d', (pl) => {
+      socket.once('KLINE_XRP_1d', (pl) => {
         log(pl.time);
 
         document.getElementById('time4').value = pl.time;
@@ -415,18 +412,17 @@
         var amount;
         if (document.getElementById('usd4').value < pl.close) {
           amount = pl.close;
-          log("cheese")
         } else {
           amount = document.getElementById('usd4').value;
         }
 
-        if (document.getElementById('ETHWallet').value >= document.getElementById('ethereum4').value) {
+        if (document.getElementById('XRPWallet').value >= document.getElementById('xrp4').value) {
           document.getElementById('usd4').value = amount;
           document.getElementById("limitSell").submit();
           document.getElementById('enoughWallet').innerHTML = "Order Submitted";
           console.log("pussy")
         } else {
-          document.getElementById('enoughWallet').innerHTML = "Insufficient ETH To Complete Limit Buy Order";
+          document.getElementById('enoughWallet').innerHTML = "Insufficient XRP To Complete Limit Buy Order";
           console.log(" not pussy")
         }
 
@@ -437,10 +433,10 @@
 
 
   <table>
-    <h3>Active Orders for ETH</h3>
+    <h3>Active Orders for XRP</h3>
     <tr>
       <th>Trade ID</th>
-      <th>Amount ETH</th>
+      <th>Amount XRP</th>
       <th>Amount USD</th>
       <th>Price</th>
       <th>Order type</th>
@@ -459,7 +455,7 @@
     </tr>
     <% }) %>
     <div class="myDiv">
-      <form id="cancelTrade" action="/users/cancelTradeETH" method="POST">
+      <form id="cancelTrade" action="/users/cancelTradeXRP" method="POST">
         <div>
           <input type="hidden" id="tid" name="id" value="" required>
         </div>
