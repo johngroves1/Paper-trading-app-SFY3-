@@ -148,10 +148,11 @@
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content">
-        <a href="/users/chart">Bitcoin</a>
+        <a href="/users/btc">Bitcoin</a>
         <a href="/users/ethereum">Ethereum</a>
         <a href="/users/xrp">XRP</a>
         <a href="/users/bnb">BNB</a>
+        <a href="/users/ada">ADA</a>
       </div>
     </div>
     <div class="topnav-right">
@@ -232,7 +233,7 @@
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/btcI" width="40px" height="40px"></td>
         <td id="amountBTC" class="tg-0lax"><%= btc %></td>
-        <td class="tg-0lax"><%= amount %></td>
+        <td class="tg-0lax"><%= amountBTC %></td>
         <td id="amountUSD" class="tg-0lax">loading...</td>
         <td id="btcPrice" class="tg-0lax">loading...</td>
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
@@ -241,7 +242,7 @@
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/ethI" width="40px" height="40px"></td>
         <td id="amountETH" class="tg-0lax"><%= eth %></td>
-        <td class="tg-0lax"><%= amount %></td>
+        <td class="tg-0lax"><%= amountETH %></td>
         <td id="amountUSDeth" class="tg-0lax">loading...</td>
         <td id="ethPrice" class="tg-0lax">loading...</td>
 
@@ -250,7 +251,7 @@
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/xrpI" width="40px" height="40px"></td>
         <td id="amountXRP" class="tg-0lax"><%= xrp %></td>
-        <td class="tg-0lax"><%= amount %></td>
+        <td class="tg-0lax"><%= amountXRP %></td>
         <td id="amountUSDxrp" class="tg-0lax">loading...</td>
         <td id="xrpPrice" class="tg-0lax">loading...</td>
 
@@ -259,14 +260,17 @@
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/bnbI" width="40px" height="40px"></td>
         <td id="amountBNB" class="tg-0lax"><%= bnb %></td>
-        <td class="tg-0lax"><%= amount %></td>
+        <td class="tg-0lax"><%= amountBNB %></td>
         <td id="amountUSDbnb" class="tg-0lax">loading...</td>
         <td id="bnbPrice" class="tg-0lax">loading...</td>
 
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/adaI" width="40px" height="40px"></td>
-
+        <td id="amountADA" class="tg-0lax"><%= ada %></td>
+        <td class="tg-0lax"><%= amountADA %></td>
+        <td id="amountUSDada" class="tg-0lax">loading...</td>
+        <td id="adaPrice" class="tg-0lax">loading...</td>
 
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
       </tr>
@@ -325,6 +329,15 @@
       console.log("amountUSDbnb" + amountUSD);
       document.getElementById('amountUSDbnb').innerHTML = Math.round(amountUSD * 100) / 100 + " USD";
       document.getElementById('bnbPrice').innerHTML = pl.close + " USD";
+
+    });
+
+    socket.on('KLINE_ADA_1m', (pl) => {
+
+      var amountUSD = document.getElementById('amountADA').innerHTML * pl.close;
+      console.log("amountUSDada" + amountUSD);
+      document.getElementById('amountUSDada').innerHTML = Math.round(amountUSD * 100) / 100 + " USD";
+      document.getElementById('adaPrice').innerHTML = pl.close + " USD";
 
     });
 

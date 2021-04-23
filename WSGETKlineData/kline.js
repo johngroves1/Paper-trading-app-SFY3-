@@ -81,6 +81,21 @@ const BNBChange = binanceBTC1d.onTicker('BNBUSDT', (data) => {
     io.sockets.emit('KLINE_BNB_CHANGE',{change: data.priceChangePercent, high24h: data.high, low24h: data.low, price: data.currentClose});
 });
 
+const ADA1d = binanceBTC1d.onKline('ADAUSDT', '1d', (data) => {
+    io.sockets.emit('KLINE_ADA_1d',{time:Math.round(data.kline.startTime/1000),open:parseFloat(data.kline.open),high:parseFloat(data.kline.high),low:parseFloat(data.kline.low),close:parseFloat(data.kline.close)});
+});
+
+const ADA1m = binanceBTC1d.onKline('ADAUSDT', '1m', (data) => {
+    io.sockets.emit('KLINE_ADA_1m',{time:Math.round(data.kline.startTime/1000),open:parseFloat(data.kline.open),high:parseFloat(data.kline.high),low:parseFloat(data.kline.low),close:parseFloat(data.kline.close)});
+});
+
+const ADA4h = binanceBTC1d.onKline('ADAUSDT', '4h', (data) => {
+    io.sockets.emit('KLINE_ADA_4h',{time:Math.round(data.kline.startTime/1000),open:parseFloat(data.kline.open),high:parseFloat(data.kline.high),low:parseFloat(data.kline.low),close:parseFloat(data.kline.close)});
+});
+const ADAChange = binanceBTC1d.onTicker('ADAUSDT', (data) => {
+    io.sockets.emit('KLINE_ADA_CHANGE',{change: data.priceChangePercent, high24h: data.high, low24h: data.low, price: data.currentClose});
+});
+
 /*const eth1d = binanceBTC1d.onKline('ETHUSDT', '1d', (data) => {
     io.sockets.emit('KLINE11',{time:Math.round(data.kline.startTime/1000),open:parseFloat(data.kline.open),high:parseFloat(data.kline.high),low:parseFloat(data.kline.low),close:parseFloat(data.kline.close)});
 });
