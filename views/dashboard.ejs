@@ -271,7 +271,7 @@
                   <td></td>
                   <td></td>
 
-                  <td class="tg-0lax"><a href="/users/chart"><img alt="Poster" src="/users/btcI" width="40px"
+                  <td class="tg-0lax"><a href="/users/btc"><img alt="Poster" src="/users/btcI" width="40px"
                         height="40px"></a></td>
                   <td class="tg-0lax" id=btcPrice>Loading...</td>
                   <td class="tg-0lax" id=btcPer>Loading...</td>
@@ -284,9 +284,9 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="tg-0lax"><img alt="Poster" src="/users/ethI" width="40px" height="40px"></td>
-                  <td class="tg-0lax"></td>
-                  <td class="tg-0lax"></td>
+                  <td class="tg-0lax"><a href="/users/ethereum"><img alt="Poster" src="/users/ethI" width="40px" height="40px"></a></td>
+                  <td class="tg-0lax" id=ethPrice>Loading...</td>
+                  <td class="tg-0lax" id=ethPer>Loading...</td>
                 </tr>
                 <tr>
                   <td></td>
@@ -296,9 +296,9 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="tg-0lax"><img alt="Poster" src="/users/xrpI" width="40px" height="40px"></td>
-                  <td class="tg-0lax"></td>
-                  <td class="tg-0lax"></td>
+                  <td class="tg-0lax"><a href="/users/xrp"><img alt="Poster" src="/users/xrpI" width="40px" height="40px"></a></td>
+                  <td class="tg-0lax"id=xrpPrice>Loading...</td>
+                  <td class="tg-0lax"id=xrpPer>Loading...</td>
                 </tr>
                 <tr>
                   <td></td>
@@ -308,9 +308,9 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="tg-0lax"><img alt="Poster" src="/users/bnbI" width="40px" height="40px"></td>
-                  <td class="tg-0lax"></td>
-                  <td class="tg-0lax"></td>
+                  <td class="tg-0lax"><a href="/users/bnb"><img alt="Poster" src="/users/bnbI" width="40px" height="40px"></a></td>
+                  <td class="tg-0lax" id=bnbPrice>Loading...</td>
+                  <td class="tg-0lax" id=bnbPer>Loading...</td>
                 </tr>
                 <tr>
                   <td></td>
@@ -320,9 +320,9 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="tg-0lax"><img alt="Poster" src="/users/adaI" width="40px" height="40px"></td>
-                  <td class="tg-0lax"></td>
-                  <td class="tg-0lax"></td>
+                  <td class="tg-0lax"><a href="/users/ada"><img alt="Poster" src="/users/adaI" width="40px" height="40px"></a></td>
+                  <td class="tg-0lax" id=adaPrice>Loading...</td>
+                  <td class="tg-0lax" id=adaPer>Loading...</td>
                 </tr>
               </tbody>
             </table>
@@ -338,7 +338,7 @@
   <script>
     var socket = io.connect('http://127.0.0.1:3000/');
 
-
+    //BTC live price and percentage
     socket.on('KLINE_BTC_1m', (pl) => {
 
       document.getElementById('btcPrice').innerHTML = pl.close;
@@ -347,6 +347,38 @@
     socket.on('KLINE_CHANGE', (pl) => {
 
       document.getElementById('btcPer').innerHTML = pl.change + "%";
+    }
+    );
+
+    //ETH live price and percentage
+    socket.on('KLINE_ETH_CHANGE', (pl) => {
+
+    document.getElementById('ethPer').innerHTML = pl.change + "%";
+    document.getElementById('ethPrice').innerHTML =  Math.round(pl.price * 100) / 100;
+    }
+    );
+
+    //XRP live price and percentage
+    socket.on('KLINE_XRP_CHANGE', (pl) => {
+
+    document.getElementById('xrpPer').innerHTML = pl.change + "%";
+    document.getElementById('xrpPrice').innerHTML =  Math.round(pl.price * 100) / 100;
+    }
+    );
+    
+    //BNB live price and percentage
+    socket.on('KLINE_BNB_CHANGE', (pl) => {
+
+    document.getElementById('bnbPer').innerHTML = pl.change + "%";
+    document.getElementById('bnbPrice').innerHTML =  Math.round(pl.price * 100) / 100;
+    }
+    );
+
+    //ADA live price and percentage
+    socket.on('KLINE_ADA_CHANGE', (pl) => {
+
+    document.getElementById('adaPer').innerHTML = pl.change + "%";
+    document.getElementById('adaPrice').innerHTML =  Math.round(pl.price * 100) / 100;
     }
     );
   </script>
