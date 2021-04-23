@@ -11,7 +11,7 @@ const api = require('binance');
 const fetch = require("node-fetch");
 
 
-
+console.log("poo");
 
 
 
@@ -74,7 +74,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
         console.log(results.rows);
         pool.query(
             `SELECT * FROM trades
-            WHERE walletid = $1`, [results.rows[0].walletid], (err, result) => {
+            WHERE walletid = $1 AND coin = 'btc'`, [results.rows[0].walletid], (err, result) => {
             if (err) {
                 throw err
             }
@@ -159,6 +159,7 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                         });
                     })
                     .catch(err => console.log(err))
+                // amountTrade = result.rows[0].amount;
             }
             
             console.log(checkFilled + "cheese");
@@ -168,16 +169,138 @@ app.get('/users/chart', checkNotAuthenticated, (req, res) => {
                 user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
                 eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, usd: Math.round(results.rows[0].usd * 100) / 100, walletid: results.rows[0].walletid, bitcoinWallet: results.rows[0].bitcoin, trades: result.rows, checkTrade: checkFilled
             });
-           
+            //req.flash('success_msg', "You are now registered. Please log in");
 
         }
         )
+
+    }
+    );
+});
+
+app.get('/users/ethereum', checkNotAuthenticated, (req, res) => {
+    var checkFilled = "active";
+    pool.query(
+        `SELECT * FROM wallet
+        WHERE id = $1`, [req.user.id], (err, results) => {
+        console.log(results.rows);
+        pool.query(
+            `SELECT * FROM trades
+            WHERE walletid = $1 AND coin = 'eth'`, [results.rows[0].walletid], (err, result) => {
+            if (err) {
+                throw err
+            }
+            //console.log(result.rows + "sneeze");
+            
+            if (result.rows.length > 0) {
+                fetch(`http://127.0.0.1:9665/fetchAPI?endpoint=https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1d&limit=50000`)
+                    .then(result => result.json())
+                    .then(data => {
+                        const cdata = data.map(d => {
+                            return { time: d[0] / 1000, open: parseFloat(d[1]), high: parseFloat(d[2]), low: parseFloat(d[3]), close: parseFloat(d[4]) }
+                        });
+
+
+                        cdata.forEach(e => {
+                            result.rows.forEach(t => {
+                                var filled = false;
+                                //log(e.high);
+                                if (e.low <= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitBuy" && t.coin =="eth") {
+                                    checkFilled = "filled";
+                                    pool.query(
+                                        `UPDATE wallet SET ethereum = ethereum + $1
+                                        WHERE id =$2`, [parseFloat(t.amount), req.user.id], (err, data) => {
+                                        if (err) {
+                                            throw err
+                                        }
+                                        //console.log(data.rows);
+
+                                    }
+                                    )
+                                    pool.query(
+                                        `DELETE FROM trades WHERE tradeid = $1
+                                        RETURNING *`, [t.tradeid], (err, data) => {
+                                            if (err) {
+                                                throw err
+                                            }
+                                            console.log(data.rows);
+                                            console.log("yurt");
+                                            
+                                            console.log(checkFilled);
+                                            
+                                            
+
+                                        }
+                                    )
+                                    console.log("ORDER SUCCESFUL")
+                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
+                                    console.log(t.amount);
+                                    filled = true;
+                                } else if (e.high >= (parseFloat(t.amountusd)) / parseFloat(t.amount) && e.time >= t.time && filled == false && t.type == "limitSell" && t.coin =="eth") {
+                                    console.log(parseFloat(t.amountusd) + "tits" + e.high)
+                                    pool.query(
+                                        `UPDATE wallet SET usd = usd + $1
+                                        WHERE id =$2`, [parseFloat(t.amountusd), req.user.id], (err, data) => {
+                                        if (err) {
+                                            throw err
+                                        }
+                                        //console.log(data.rows);
+
+                                    }
+                                    )
+                                    pool.query(
+                                        `DELETE FROM trades WHERE tradeid = $1
+                                        RETURNING *`, [t.tradeid], (err, data) => {
+                                            if (err) {
+                                                throw err
+                                            }
+                                            console.log(data.rows);
+                                            console.log("yurt");
+                                            checkFilled = "filled";
+                                            console.log(checkFilled);
+                                            
+
+                                        }
+                                    )
+                                    console.log("ORDER Sewll SUCCESFUL")
+                                    console.log(parseFloat(t.amountusd) / parseFloat(t.amount));
+                                    filled = true;
+                                }
+                            });
+
+                        });
+                    })
+                    .catch(err => console.log(err))
+                // amountTrade = result.rows[0].amount;
+            }
+            
+            console.log(checkFilled + "cheese");
+
+
+            res.render("ethereum", {
+                user: req.user.name, test: req.user.id, email: req.user.email, btc: results.rows[0].bitcoin,
+                eth: results.rows[0].ethereum, xrp: results.rows[0].xrp, usd: Math.round(results.rows[0].usd * 100) / 100, walletid: results.rows[0].walletid, ethereumWallet: results.rows[0].ethereum, trades: result.rows, checkTrade: checkFilled
+            });
+            //req.flash('success_msg', "You are now registered. Please log in");
+
+        }
+        )
+
+
+
+
+
+
     }
     );
 });
 
 app.get("/users/javascript", (req, res) => {
     res.sendFile(path.join(__dirname, "/charts/chart.js"));
+});
+
+app.get("/users/ethJS", (req, res) => {
+    res.sendFile(path.join(__dirname, "/charts/ethereum.js"));
 });
 
 app.get("/users/assetsjs", (req, res) => {
@@ -418,6 +541,79 @@ app.post('/users/chart', (req, res) => {
 
 })
 
+app.post('/users/ethMarketBuy', (req, res) => {
+    //let {ethereum} = req.body;
+    console.log(req.body.id);
+    console.log(req.body.ethereum);
+    //console.log(req.body.ethereum1);
+    console.log(req.body.coin);
+    var amount = req.body.ethereum * req.body.coin;
+    console.log(amount);
+    //res.redirect('/users/chart');
+  
+    pool.query(
+        `SELECT * FROM WALLET
+        WHERE id = $1`, [req.body.id], (err, results) => {
+        if (err) {
+            throw err
+        }
+        //console.log(results.rows);
+        var coin = `ethereum`;
+  
+  
+        if (results.rows.length > 0) {
+            console.log(req.body.coin);
+            if (req.body.buy == 1) {
+                pool.query(
+                    `UPDATE wallet SET ethereum = ethereum + $1, usd = usd - $3
+                            WHERE id =$2`, [req.body.ethereum, req.body.id, req.body.coin], (err, results) => {
+                    if (err) {
+                        throw err
+                    }
+                    //console.log(results.rows);
+                    // req.flash('success_msg', "You are now registered. Please log in");
+                    //res.redirect('/users/chart');
+                }
+                )
+  
+            } else {
+                pool.query(
+                    `UPDATE wallet SET ethereum = ethereum - $1, usd = usd + $3
+                            WHERE id =$2`, [req.body.ethereum, req.body.id, req.body.coin], (err, results) => {
+                    if (err) {
+                        throw err
+                    }
+                    //console.log(results.rows);
+                    // req.flash('success_msg', "You are now registered. Please log in");
+                    //res.redirect('/users/chart');
+                }
+                )
+  
+            }
+  
+  
+  
+  
+        } else {
+            // If wallet does not exist insert data to DB
+            pool.query(
+                `INSERT INTO wallet (id, ethereum) VALUES ($2, $1)`, [req.body.ethereum, req.body.id], (err, results) => {
+                    if (err) {
+                        throw err
+                    }
+                    console.log(results.rows);
+                    //req.flash('success_msg', "You are now registered. Please log in");
+  
+                }
+            )
+  
+  
+        }
+    })
+    res.redirect('/users/ethereum');
+  
+  })
+
 app.post('/users/btcLimitBuy', (req, res) => {
     //let {bitcoin} = req.body;
     console.log(req.body.id);
@@ -454,6 +650,35 @@ app.post('/users/btcLimitBuy', (req, res) => {
     res.redirect('/users/chart');
 
 })
+
+app.post('/users/ethLimitBuy', (req, res) => {
+    //let {bitcoin} = req.body;
+    console.log(req.body.id);
+    console.log(req.body.ethereum);
+    console.log(req.body.time);
+    console.log(req.body.coin);
+    var amount = req.body.ethereum * req.body.usd;
+    console.log(amount);
+    //res.redirect('/users/chart');
+
+    pool.query(
+        `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.ethereum, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
+            if (err) {
+                throw err
+            }
+        })
+    pool.query(
+        `UPDATE wallet SET usd = usd - $2
+            WHERE walletid =$1`, [req.body.id, amount], (err, results) => {
+        if (err) {
+            throw err
+        }
+
+    })
+    res.redirect('/users/chart');
+
+})
+
 app.post('/users/btcLimitSell', (req, res) => {
     //let {bitcoin} = req.body;
     console.log(req.body.id);
@@ -491,6 +716,41 @@ app.post('/users/btcLimitSell', (req, res) => {
 
     })
     res.redirect('/users/chart');
+
+})
+app.post('/users/ethLimitSell', (req, res) => {
+    //let {bitcoin} = req.body;
+    console.log(req.body.id);
+    console.log(req.body.ethereum);
+    console.log(req.body.coin);
+    console.log(req.body.type);
+    console.log(req.body.time);
+    //console.log(req.body.bitcoin1);
+    console.log(req.body.coin);
+    var amount = req.body.ethereum * req.body.usd;
+    console.log(amount);
+    //res.redirect('/users/chart');
+
+    pool.query(
+        `INSERT INTO trades (walletid, amount, amountusd, coin, type, time) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.id, req.body.ethereum, amount, req.body.coin, req.body.type, req.body.time], (err, results) => {
+            if (err) {
+                throw err
+            }
+            //console.log(results.rows);
+
+        })
+    pool.query(
+        `UPDATE wallet SET ethereum = ethereum - $2
+            WHERE walletid =$1`, [req.body.id, req.body.ethereum], (err, results) => {
+        if (err) {
+            throw err
+        }
+
+
+
+
+    }) 
+    res.redirect('/users/ethereum');
 
 })
 
@@ -544,7 +804,52 @@ app.post('/users/cancelTrade', (req, res) => {
 
     }
 
-    res.redirect('/users/chart');
+    res.redirect('/users/ethereum');
+
+})
+
+app.post('/users/cancelTradeETH', (req, res) => {
+    //let {bitcoin} = req.body;
+    console.log(req.body.id);
+    console.log(req.body.walletid);
+    console.log(req.body.amount);
+    console.log(req.body.type);
+    console.log(req.body.usd);
+    //console.log(req.body.bitcoin1);
+    //console.log(req.body.coin);
+    //res.redirect('/users/chart');
+
+    pool.query(
+        `DELETE FROM trades WHERE tradeid = $1`, [req.body.id], (err, data) => {
+            if (err) {
+                throw err
+            }
+            //console.log(data.rows);
+
+        }
+    )
+    if (req.body.type == "limitBuy") {
+        pool.query(
+            `UPDATE wallet SET usd = usd + $2
+                WHERE walletid =$1`, [req.body.walletid, req.body.usd], (err, results) => {
+            if (err) {
+                throw err
+            }
+        })
+
+    } else {
+        pool.query(
+            `UPDATE wallet SET ethereum = ethereum + $2
+                WHERE walletid =$1`, [req.body.walletid, req.body.amount], (err, results) => {
+            if (err) {
+                throw err
+            }
+
+        })
+
+    }
+
+    res.redirect('/users/ethereum');
 
 })
 
