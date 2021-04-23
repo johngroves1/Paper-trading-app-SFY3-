@@ -243,24 +243,27 @@
         <td class="tg-0lax"><%= amount %></td>
         <td id="amountUSDeth" class="tg-0lax">loading...</td>
         <td id="ethPrice" class="tg-0lax">loading...</td>
-        
+
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
       </tr>
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/xrpI" width="40px" height="40px"></td>
-        <td class="tg-0lax"><%= xrp %></td>
-        
+        <td id="amountXRP" class="tg-0lax"><%= xrp %></td>
+        <td class="tg-0lax"><%= amount %></td>
+        <td id="amountUSDxrp" class="tg-0lax">loading...</td>
+        <td id="xrpPrice" class="tg-0lax">loading...</td>
+
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
       </tr>
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/bnbI" width="40px" height="40px"></td>
-        
-        
+
+
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
       <tr>
         <td class="tg-0lax"><img alt="Poster" src="/users/adaI" width="40px" height="40px"></td>
-        
-        
+
+
         <td class="tg-0lax"><a href="/users/chart" style="text-decoration:none">Trade</a></td>
       </tr>
 
@@ -300,6 +303,15 @@
       console.log("amountUSDeth" + amountUSD);
       document.getElementById('amountUSDeth').innerHTML = amountUSD + " USD";
       document.getElementById('ethPrice').innerHTML = pl.close + " USD";
+
+    });
+
+    socket.on('KLINE_XRP_1m', (pl) => {
+
+      var amountUSD = document.getElementById('amountXRP').innerHTML * pl.close;
+      console.log("amountUSDxrp" + amountUSD);
+      document.getElementById('amountUSDxrp').innerHTML = Math.round(amountUSD * 100) / 100 + " USD";
+      document.getElementById('xrpPrice').innerHTML = pl.close + " USD";
 
     });
 
