@@ -1,300 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <script src="http://127.0.0.1:3000/socket.io/socket.io.js"></script>
-    <style>
-      body {margin:0;font-family:Arial}
-      
-      .topnav {
-        overflow: hidden;
-        background-color: #333;
-      }
-      
-      .topnav a {
-        float: left;
-        display: block;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-      }
-      
-      .active {
-        background-color: #31d2f2;
-        color: white;
-      }
-      
-      .topnav .icon {
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="http://127.0.0.1:3000/socket.io/socket.io.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial
+    }
+
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    .topnav a {
+      float: left;
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+    .active {
+      background-color: #31d2f2;
+      color: white;
+    }
+
+    .topnav .icon {
+      display: none;
+    }
+
+    .topnav-right {
+      float: right;
+    }
+
+    .dropdown {
+      float: left;
+      overflow: hidden;
+    }
+
+    .dropdown .dropbtn {
+      font-size: 17px;
+      border: none;
+      outline: none;
+      color: white;
+      padding: 14px 16px;
+      background-color: inherit;
+      font-family: inherit;
+      margin: 0;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      float: none;
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+
+    .topnav a:hover,
+    .dropdown:hover .dropbtn {
+      background-color: #555;
+      color: white;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    @media screen and (max-width: 600px) {
+
+      .topnav a:not(:first-child),
+      .dropdown .dropbtn {
         display: none;
       }
 
-      .topnav-right {
+      .topnav a.icon {
         float: right;
+        display: block;
       }
-      
-      .dropdown {
-        float: left;
-        overflow: hidden;
+    }
+
+    @media screen and (max-width: 600px) {
+      .topnav.responsive {
+        position: relative;
       }
-      
-      .dropdown .dropbtn {
-        font-size: 17px;    
-        border: none;
-        outline: none;
-        color: white;
-        padding: 14px 16px;
-        background-color: inherit;
-        font-family: inherit;
-        margin: 0;
-      }
-      
-      .dropdown-content {
-        display: none;
+
+      .topnav.responsive .icon {
         position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
+        right: 0;
+        top: 0;
       }
-      
-      .dropdown-content a {
+
+      .topnav.responsive a {
         float: none;
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
         display: block;
         text-align: left;
       }
-      
-      .topnav a:hover, .dropdown:hover .dropbtn {
-        background-color: #555;
-        color: white;
+
+      .topnav.responsive .dropdown {
+        float: none;
       }
-      
-      .dropdown-content a:hover {
-        background-color: #ddd;
-        color: black;
+
+      .topnav.responsive .dropdown-content {
+        position: relative;
       }
-      
-      .dropdown:hover .dropdown-content {
+
+      .topnav.responsive .dropdown .dropbtn {
         display: block;
+        width: 100%;
+        text-align: left;
       }
-      
-      @media screen and (max-width: 600px) {
-        .topnav a:not(:first-child), .dropdown .dropbtn {
-          display: none;
-        }
-        .topnav a.icon {
-          float: right;
-          display: block;
-        }
+    }
+  </style>
+</head>
+
+<body>
+
+  <script src="/users/style"></script>
+
+  <div class="topnav" id="myTopnav">
+    <a href="/users/dashboard" class="active">Home</a>
+    <div class="dropdown">
+      <button class="dropbtn">Coins
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <a href="/users/chart">Bitcoin</a>
+        <a href="/users/ethereum">Ethereum</a>
+        <a href="/users/xrp">XRP</a>
+        <a href="/users/bnb">BNB</a>
+
+      </div>
+    </div>
+    <div class="topnav-right">
+      <a href="/users/assets" style="text-align: right;">Hello <%= user.charAt(0).toUpperCase() + user.slice(1) %></a>
+      <a href="/users/logout">Logout</a>
+
+    </div>
+
+    <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+  </div>
+
+  <script>
+    function myFunction() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
       }
-      
-      @media screen and (max-width: 600px) {
-        .topnav.responsive {position: relative;}
-        .topnav.responsive .icon {
-          position: absolute;
-          right: 0;
-          top: 0;
-        }
-        .topnav.responsive a {
-          float: none;
-          display: block;
-          text-align: left;
-        }
-        .topnav.responsive .dropdown {float: none;}
-        .topnav.responsive .dropdown-content {position: relative;}
-        .topnav.responsive .dropdown .dropbtn {
-          display: block;
-          width: 100%;
-          text-align: left;
-        }
-      }
-      </style>
-      </head>
-      <body>
+    }
 
-        <script src="/users/style"></script>
+  </script>
+  <div style="text-align: center;">
+    <table style="width: 100%;">
+      <tbody>
+        <tr style="color: rgb(1, 151, 151);">
+          <td>&nbsp;</td>
+          <td>&nbsp;<h3 style="font-size: 25px;">Start trading today</h3>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr
+          style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">
+          <td>&nbsp;</td>
+          <td>&nbsp;<h1 style="font-size: 50px;">Buy and sell cryptocurrency</h1>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td style="font-size: 17px;">&nbsp;<p>Learn to buy and sell cryptocurrency at the comfort of no cash loss!</p>
+            <p>Feel free to learn and excercise your trading skills with market orders and limit orders</p>
+            <p>Click on your name in the navigation bar to view your asset overview</p>
+            <p>Click on the Coins list to select your coin and begin trading</p>
+          </td>
+          <td>&nbsp;</td>
+        </tr>
 
-        <div class="topnav" id="myTopnav">
-          <a href="/users/dashboard" class="active">Home</a>
-          <div class="dropdown">
-            <button class="dropbtn">Coins 
-              <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-content">
-              <a href="/users/chart">Bitcoin</a>
-              <a href="/users/ethereum">Ethereum</a>
-              <a href="#">XRP</a>
-            </div>
-          </div>
-          <div class="topnav-right">
-            <a href="/users/assets" style="text-align: right;">Hello <%= user.charAt(0).toUpperCase() + user.slice(1) %></a>
-            <a href="/users/logout">Logout</a>
-            
-          </div> 
-         
-          <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
-        </div>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp; <style type="text/css">
+              .tg {
+                border-collapse: collapse;
+                border-spacing: 0;
+                text-align: center;
+                width: 100px;
+              }
 
-        <script>
-        function myFunction() {
-          var x = document.getElementById("myTopnav");
-          if (x.className === "topnav") {
-            x.className += " responsive";
-          } else {
-            x.className = "topnav";
-          }
-        }
-        
-        </script>
-<div style="text-align: center;">
-<table style="width: 100%;">
-  <tbody>
-    <tr style="color: rgb(1, 151, 151);">
-      <td>&nbsp;</td>
-      <td>&nbsp;<h3 style="font-size: 25px;">Start trading today</h3></td>
-      <td>&nbsp;</td>
-      </tr>
-  <tr  style="font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;" >
-  <td>&nbsp;</td>
-  <td>&nbsp;<h1 style="font-size: 50px;">Buy and sell cryptocurrency</h1></td>
-  <td>&nbsp;</td>
-  </tr>
-  <tr>
-  <td>&nbsp;</td>
-  <td style="font-size: 17px;">&nbsp;<p>Learn to buy and sell cryptocurrency at the comfort of no cash loss!</p>
-    <p>Feel free to learn and excercise your trading skills with market orders and limit orders</p>
-    <p>Click on your name in the navigation bar to view your asset overview</p>
-    <p>Click on the Coins list to select your coin and begin trading</p></td>
-  <td>&nbsp;</td>
-  </tr>
+              .tg td {
+                border-color: white;
+                border-style: solid;
+                border-width: 1px;
+                font-family: Arial, sans-serif;
+                font-size: 20px;
+                overflow: hidden;
+                padding: 10px 50px;
+                word-break: normal;
+              }
 
-  <tr>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp; <style type="text/css">
-        .tg  {border-collapse:collapse;border-spacing:0;text-align: center;width: 100px;}
-        .tg td{border-color:white;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:20px;
-          overflow:hidden;padding:10px 50px;word-break:normal;}
-        .tg th{border-color:white;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-          font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-        .tg .tg-0lax{text-align:center;vertical-align:top}
-        </style>
-        <table class="tg">
-        <thead>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th class="tg-0lax">Coin</th>
-            <th class="tg-0lax">Last Price</th>
-            <th class="tg-0lax">24hr Change</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            
-            <td class="tg-0lax"><a href="/users/chart"><img alt="Poster" src="/users/btcI" width="40px" height="40px"></a></td>
-            <td class="tg-0lax" id=btcPrice>Loading...</td>
-            <td class="tg-0lax"id=btcPer>Loading...</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="tg-0lax"><img alt="Poster" src="/users/ethI" width="40px" height="40px"></td>
-            <td class="tg-0lax"></td>
-            <td class="tg-0lax"></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="tg-0lax"><img alt="Poster" src="/users/xrpI" width="40px" height="40px"></td>
-            <td class="tg-0lax"></td>
-            <td class="tg-0lax"></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="tg-0lax"><img alt="Poster" src="/users/bnbI" width="40px" height="40px"></td>
-            <td class="tg-0lax"></td>
-            <td class="tg-0lax"></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="tg-0lax"><img alt="Poster" src="/users/adaI" width="40px" height="40px"></td>
-            <td class="tg-0lax"></td>
-            <td class="tg-0lax"></td>
-          </tr>
-        </tbody>
-        </table></td>
-      <td>&nbsp;</td>
-      
-      </tr>
-  </tbody>
-  </table>
-</div>
+              .tg th {
+                border-color: white;
+                border-style: solid;
+                border-width: 1px;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                overflow: hidden;
+                padding: 10px 5px;
+                word-break: normal;
+              }
+
+              .tg .tg-0lax {
+                text-align: center;
+                vertical-align: top
+              }
+            </style>
+            <table class="tg">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th class="tg-0lax">Coin</th>
+                  <th class="tg-0lax">Last Price</th>
+                  <th class="tg-0lax">24hr Change</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+
+                  <td class="tg-0lax"><a href="/users/chart"><img alt="Poster" src="/users/btcI" width="40px"
+                        height="40px"></a></td>
+                  <td class="tg-0lax" id=btcPrice>Loading...</td>
+                  <td class="tg-0lax" id=btcPer>Loading...</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="tg-0lax"><img alt="Poster" src="/users/ethI" width="40px" height="40px"></td>
+                  <td class="tg-0lax"></td>
+                  <td class="tg-0lax"></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="tg-0lax"><img alt="Poster" src="/users/xrpI" width="40px" height="40px"></td>
+                  <td class="tg-0lax"></td>
+                  <td class="tg-0lax"></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="tg-0lax"><img alt="Poster" src="/users/bnbI" width="40px" height="40px"></td>
+                  <td class="tg-0lax"></td>
+                  <td class="tg-0lax"></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="tg-0lax"><img alt="Poster" src="/users/adaI" width="40px" height="40px"></td>
+                  <td class="tg-0lax"></td>
+                  <td class="tg-0lax"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td>&nbsp;</td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
 
-<script>
-  var socket = io.connect('http://127.0.0.1:3000/');
+  <script>
+    var socket = io.connect('http://127.0.0.1:3000/');
 
 
-  socket.on('KLINE_BTC_1m', (pl) => {
+    socket.on('KLINE_BTC_1m', (pl) => {
 
-    document.getElementById('btcPrice').innerHTML = pl.close;
-  }
-  );
-  socket.on('KLINE_CHANGE', (pl) => {
+      document.getElementById('btcPrice').innerHTML = pl.close;
+    }
+    );
+    socket.on('KLINE_CHANGE', (pl) => {
 
-document.getElementById('btcPer').innerHTML = pl.change + "%";
-}
-);
-</script>
- 
-    
+      document.getElementById('btcPer').innerHTML = pl.change + "%";
+    }
+    );
+  </script>
+
+
 
 </body>
+
 </html>
