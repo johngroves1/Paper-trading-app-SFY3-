@@ -1,0 +1,73 @@
+
+#cardbody{
+    font-size: large; 
+    
+    float: right;
+}
+
+#card{
+    width: 400px;
+    margin-bottom: 100%;
+}
+#login{
+    margin-bottom: auto;
+    display: flex;
+    
+    width: 100vh;
+    margin-right: 0%;
+}
+
+#loginimage{
+    
+   
+    max-height: 100vh;
+    margin:auto;
+    
+    
+    
+}
+
+#dashboard{
+    margin-left: auto;
+    margin-right: auto;
+    width: 8em;
+}
+
+#input1{
+    align-self: center;
+    padding-left: 20%;
+    margin-top: 10%;
+    
+    
+}
+
+#input2{
+    align-self: center;
+    padding-left: 20%;
+    margin-top: 10%;
+    
+    
+}
+
+#loginTitle
+{
+    font-size: 50px;
+    text-align: center;
+}
+
+#test{
+    background-image: url("/images/stock.jpg");
+}
+
+#loginBtn{
+    text-align: center;
+    font-size: 100%;
+    margin-top: 10%;
+}
+
+@media all and (min-width: 992px) {
+	.navbar .nav-item .dropdown-menu{ display: none; }
+	.navbar .nav-item:hover .nav-link{ color: #fff;  }
+	.navbar .nav-item:hover .dropdown-menu{ display: block; }
+	.navbar .nav-item .dropdown-menu{ margin-top:0; }
+}
